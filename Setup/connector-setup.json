@@ -1,0 +1,15 @@
+{
+    "name": "cims-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+        "database.hostname": "172.16.86.9",
+        "database.port": "1433",
+        "database.user": "debezium",
+        "database.password": "Debetest01",
+        "database.dbname": "CIMS",
+        "database.server.name": "CIMSTEST",
+        "table.whitelist": "Customer.ClaimBlackList, Financial.ClaimCostPlus",
+        "database.history.kafka.bootstrap.servers": "broker:9092",
+        "database.history.kafka.topic": "dbhistory.CIMS"
+    }
+}
