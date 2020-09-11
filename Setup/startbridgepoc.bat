@@ -24,4 +24,3 @@ echo WAITING 30 SECONDS
 timeout /t 30
 echo Setting up Connectors
 curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @connector-setup.json
-SET /P _inputname= Please enter an input:
