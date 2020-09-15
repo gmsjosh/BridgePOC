@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63abd9c9-ec5e-48b0-8c05-39d3614f1aaf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/schema.avsc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/Arguments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/Arguments.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MessageProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MyRouteBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MyRouteBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/claimBlackListValue.avsc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/claimBlackListValue.avsc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/Arguments.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/Arguments.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MessageProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MessageProcessor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MyRouteBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MyRouteBuilder.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +99,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599674800263</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="moved files to folder">
+      <created>1600201414206</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1600201414206</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -136,9 +134,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="640" y="255" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600102247559" />
-    <state x="614" y="115" key="CommitChangelistDialog2" timestamp="1599674799038">
+    <state x="614" y="115" key="CommitChangelistDialog2" timestamp="1600201413024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="614" y="115" key="CommitChangelistDialog2/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600201413024" />
     <state x="614" y="115" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599674799038" />
     <state width="435" height="466" key="DebuggerActiveHint" timestamp="1599676290604">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -149,31 +148,31 @@
     </state>
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1599774187672" />
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599146722523" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1600201386374">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1600204078051">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600201386374" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600204078051" />
     <state width="1877" height="311" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599685425551" />
     <state width="1877" height="401" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@1920.0.1920.1040" timestamp="1598988273717" />
     <state width="1877" height="456" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599094537901" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1600201386374">
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1600204078051">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600201386374" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600204078051" />
     <state width="1877" height="311" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599685425551" />
     <state width="1877" height="401" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@1920.0.1920.1040" timestamp="1598988273716" />
     <state width="1877" height="456" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599094537901" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1600201386374">
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1600204078051">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600201386374" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600204078051" />
     <state width="1877" height="311" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599685425550" />
     <state width="1877" height="401" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@1920.0.1920.1040" timestamp="1598988273716" />
     <state width="1877" height="456" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599094537901" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1600201386374">
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1600204078051">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600201386374" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040/0.-1080.1920.1040@0.0.1920.1040" timestamp="1600204078051" />
     <state width="1877" height="311" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@0.0.1920.1040" timestamp="1599685425551" />
     <state width="1877" height="401" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040/3840.0.1360.728@1920.0.1920.1040" timestamp="1598988273716" />
     <state width="1877" height="456" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599094537901" />

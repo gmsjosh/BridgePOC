@@ -3,6 +3,7 @@ package gms.cims.bridge;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.avro.Schema;
+import org.apache.avro.data.Json;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.avro.reflect.ReflectData;
@@ -41,12 +42,12 @@ public class MessageProcessor implements Processor {
 
         JSONObject data_before = kafkaBodyMessageObject.getJSONObject("before");
         JSONObject data_after = kafkaBodyMessageObject.getJSONObject("after");
+        JSONObject comparedJSONData = CompareJSONObjects(data_before,data_after);
         Schema schema = LoadSchemaFromFile("schema.avsc");
-        //Schema schema = ReflectData.get().getSchema(kafkaBodyMessageObject.get("before"));
-        //System.out.println(schema);
         GenericRecordBuilder record = new GenericRecordBuilder(schema);
 
         //record.set("UserID", data_before.getString("UserID"));
+        //record.set("CCP_ID", data_before.getInt("CCP_ID"));
         //record.set("CO_ContractID", data_before.getInt("CO_ContractID"));
         // TO DO: SERIALIZE BYTES TYPE
         // record.set("RowVersion", data_before.get("RowVersion"));
@@ -56,5 +57,19 @@ public class MessageProcessor implements Processor {
         //record.set("IsIndividual_after", data_after.get("IsIndividual"));
 
         return record.build();
+    }
+
+    private JSONObject CompareJSONObjects(JSONObject before, JSONObject after) {
+        JSONObject comparedJSON = new JSONObject();
+
+        before.keys().forEachRemaining(before_key -> {
+            Object before_value = before.get(before_key);
+            Object after_value = after.get(before_key);
+            if (before_value != after_value) {
+                System.out.println("{ " + before_key + " : " + before_value + " }");
+                System.out.println("{ " + before_key + " : " + after_value + " }");
+            }
+        });
+        return comparedJSON;
     }
 }

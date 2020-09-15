@@ -1,0 +1,42 @@
+{
+  "type" : "record",
+  "name" : "schema",
+  "namespace" : "Test",
+  "fields" : [ {
+    "name" : "UserID",
+    "type" : ["null", "string"],
+    "default" : null
+  }, {
+    "name" : "CO_ContractID",
+    "type" : ["null", "int"],
+    "default" : null
+  }, {
+    "name" : "LastUpdate_before",
+    "type" : ["null", "long"],
+    "default" : null
+  }, {
+    "name" : "IsIndividual_before",
+    "type" : ["null", "boolean"],
+    "default" : null
+  }, {
+    "name" : "LastUpdate_after",
+    "type" : ["null", "long"],
+    "default" : null
+  }, {
+    "name" : "IsIndividual_after",
+    "type" : ["null", "boolean"],
+    "default" : null
+  }, {
+    "name" : "CCP_ID",
+    "type" : ["null", "int"],
+    "default" : null
+  }, {
+    "name" : "CCP_AdminFee_before",
+    "type" : ["null", "double"],
+    "default" : null
+  }, {
+    "name" : "CCP_AdminFee_after",
+    "type" : ["null", "double"],
+    "default" : null
+  }]
+}
