@@ -39,6 +39,7 @@ public class MessageProcessor implements Processor {
     private GenericRecordBuilder SetRecords(JSONObject before, JSONObject after) {
 
         Schema schema = ParseSchemaString(SchemaBuilder(before));
+        System.out.println(schema);
         GenericRecordBuilder record = new GenericRecordBuilder(schema);
 
         before.keys().forEachRemaining(key -> {
