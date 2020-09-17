@@ -2,6 +2,7 @@ package gms.cims.bridge;
 
 import io.confluent.common.config.ConfigException;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.serializers.AbstractKafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -22,7 +23,6 @@ public class KafkaAvroDeserializer extends AbstractKafkaAvroDeserializer impleme
                     Collections.singletonList(SCHEMA_REGISTRY_URL);
             this.schemaRegistry = new CachedSchemaRegistryClient(schemas,
                     Integer.MAX_VALUE);
-
 
         } catch (ConfigException e) {
             throw new org.apache.kafka.common.config.ConfigException(e.getMessage());

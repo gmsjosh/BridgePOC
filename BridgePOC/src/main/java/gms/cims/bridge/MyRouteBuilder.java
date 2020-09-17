@@ -23,9 +23,9 @@ public class MyRouteBuilder extends RouteBuilder {
                 + "&keyDeserializer=" + StringDeserializer.class.getName()
                 + "&valueDeserializer=" + KafkaAvroDeserializer.class.getName())
                 .process(new MessageProcessor())
-                .log("Message received from BlackList : ${body}")
-                .to("kafka:" + Arguments.DestinationTopic + "?brokers=" + Arguments.Broker
-                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());
+                .log("Message received from BlackList : ${body}");
+                /*.to("kafka:" + Arguments.DestinationTopic + "?brokers=" + Arguments.Broker
+                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());*/
 
         from("kafka:" + Arguments.CCPTopic + "?brokers=" + Arguments.Broker
                 + "&maxPollRecords=5000"
@@ -34,9 +34,9 @@ public class MyRouteBuilder extends RouteBuilder {
                 + "&keyDeserializer=" + StringDeserializer.class.getName()
                 + "&valueDeserializer=" + KafkaAvroDeserializer.class.getName())
                 .process(new MessageProcessor())
-                .log("Message received from ClaimsCostPlus : ${body}")
-                .to("kafka:" + Arguments.DestinationTopic + "?brokers=" + Arguments.Broker
-                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());
+                .log("Message received from ClaimsCostPlus : ${body}");
+                /*.to("kafka:" + Arguments.DestinationTopic + "?brokers=" + Arguments.Broker
+                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());*/
     }
 
 }
