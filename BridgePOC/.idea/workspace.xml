@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63abd9c9-ec5e-48b0-8c05-39d3614f1aaf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/KafkaAvroDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/KafkaAvroDeserializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MessageProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MyRouteBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/MyRouteBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/KafkaAvroDeserializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/KafkaAvroDeserializer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MessageProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MessageProcessor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MyRouteBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gms/cims/bridge/MyRouteBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Setup/schema.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../Setup/schema.avsc" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

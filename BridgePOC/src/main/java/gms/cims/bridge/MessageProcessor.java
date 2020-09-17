@@ -40,14 +40,16 @@ public class MessageProcessor implements Processor {
         JSONObject data_before = kafkaBodyMessageObject.getJSONObject("before");
         JSONObject data_after = kafkaBodyMessageObject.getJSONObject("after");
 
+        GenericRecordBuilder record = SetRecords(data_before, data_after, GetSchema(kafkaBodyMessageObject));
+
+        return record.build();
+    }
+
+    private Schema GetSchema(JSONObject kafkaBodyMessageObject) throws IOException, RestClientException {
         JSONObject sourceJSON = kafkaBodyMessageObject.getJSONObject("source");
         SchemaRegistryClient registry = new CachedSchemaRegistryClient(Arguments.SchemaRegistry, Integer.MAX_VALUE);
         int registryID = GetIDFromNamespace(sourceJSON, registry);
-        Schema schema = registry.getById(registryID);
-
-        GenericRecordBuilder record = SetRecords(data_before, data_after);
-
-        return record.build();
+        return registry.getById(registryID);
     }
 
     private int GetIDFromNamespace(JSONObject sourceJSON, SchemaRegistryClient registry) throws IOException, RestClientException {
@@ -60,43 +62,17 @@ public class MessageProcessor implements Processor {
         return 0;
     }
 
-    private Schema ParseSchemaString(String schemaString) {
-        return new Schema.Parser().parse(schemaString);
-    }
-
-    private GenericRecordBuilder SetRecords(JSONObject before, JSONObject after) {
+    private GenericRecordBuilder SetRecords(JSONObject before, JSONObject after, Schema schema) {
 
         GenericRecordBuilder record = new GenericRecordBuilder(schema);
-
-        before.keys().forEachRemaining(key -> {
+        System.out.println(record);
+        /*before.keys().forEachRemaining(key -> {
             record.set(key+"_before", before.get(key).toString());
         });
         after.keys().forEachRemaining(key -> {
             record.set(key+"_after", after.get(key).toString());
-        });
+        });*/
 
         return record;
-    }
-
-    private String SchemaBuilder(JSONObject kvp) {
-        final String[] schema = {"{"
-                + "\"type\" : \"record\","
-                + "\"name\" : \"schema\","
-                + "\"namespace\" : \"Test\","
-                + "\"fields\" : [ {"};
-        kvp.keys().forEachRemaining(key -> {
-            schema[0] += MessageFormat.format("\"name\" : \"{0}\",", (key+"_before"))
-                    +"\"type\" : [\"null\", \"string\"],"
-                    +"\"default\" : null"
-                    +"}, {"
-                    +MessageFormat.format("\"name\" : \"{0}\",", (key+"_after"))
-                    +"\"type\" : [\"null\", \"string\"],"
-                    +"\"default\" : null"
-                    +"}, {";
-        });
-
-        schema[0] = schema[0].substring(0, schema[0].length() - 4);
-        schema[0] += "}]"+"}";
-        return schema[0];
     }
 }
