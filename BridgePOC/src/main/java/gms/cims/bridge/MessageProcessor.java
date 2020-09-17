@@ -14,9 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.List;
 
 public class MessageProcessor implements Processor {
 
@@ -49,6 +46,7 @@ public class MessageProcessor implements Processor {
         JSONObject sourceJSON = kafkaBodyMessageObject.getJSONObject("source");
         SchemaRegistryClient registry = new CachedSchemaRegistryClient(Arguments.SchemaRegistry, Integer.MAX_VALUE);
         int registryID = GetIDFromNamespace(sourceJSON, registry);
+        System.out.println(registry.getById(registryID));
         return registry.getById(registryID);
     }
 
@@ -62,15 +60,18 @@ public class MessageProcessor implements Processor {
         return 0;
     }
 
-    private GenericRecordBuilder SetRecords(JSONObject before, JSONObject after, Schema schema) {
-
+    private GenericRecordBuilder SetRecords(JSONObject beforeJSON, JSONObject afterJSON, Schema schema) {
+        GenericRecordBuilder envelope = new GenericRecordBuilder(schema);
+        GenericRecordBuilder before = new GenericRecordBuilder(schema.getField("before").schema());
+        GenericRecordBuilder after = new GenericRecordBuilder(schema.getField("after").schema());
+        GenericRecordBuilder value = new GenericRecordBuilder(schema.getField("value").schema());
+        
         GenericRecordBuilder record = new GenericRecordBuilder(schema);
-        System.out.println(record);
         /*before.keys().forEachRemaining(key -> {
-            record.set(key+"_before", before.get(key).toString());
+            record.set("before."+key, before.get(key));
         });
         after.keys().forEachRemaining(key -> {
-            record.set(key+"_after", after.get(key).toString());
+            record.set("after."+key, after.get(key));
         });*/
 
         return record;
