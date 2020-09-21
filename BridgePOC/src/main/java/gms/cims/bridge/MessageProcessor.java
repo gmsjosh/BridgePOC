@@ -52,9 +52,10 @@ public class MessageProcessor implements Processor {
 
     private int GetIDFromNamespace(JSONObject sourceJSON, SchemaRegistryClient registry) throws IOException, RestClientException {
         String namespace = sourceJSON.get("name")+"."+sourceJSON.get("schema")+"."+sourceJSON.get("table");
+        String name = "Envelope";
         for (int i=1; i <= (registry.getAllSubjects().size()); i++) {
-            if (namespace.equals(registry.getById(i).getNamespace())){
-                return i+1;
+            if (namespace.equals(registry.getById(i).getNamespace()) && name.equals(registry.getById(i).getName())){
+                return i;
             }
         }
         return 0;
@@ -64,16 +65,22 @@ public class MessageProcessor implements Processor {
         GenericRecordBuilder envelope = new GenericRecordBuilder(schema);
         GenericRecordBuilder before = new GenericRecordBuilder(schema.getField("before").schema());
         GenericRecordBuilder after = new GenericRecordBuilder(schema.getField("after").schema());
-        GenericRecordBuilder value = new GenericRecordBuilder(schema.getField("value").schema());
-        
-        GenericRecordBuilder record = new GenericRecordBuilder(schema);
-        /*before.keys().forEachRemaining(key -> {
-            record.set("before."+key, before.get(key));
-        });
-        after.keys().forEachRemaining(key -> {
-            record.set("after."+key, after.get(key));
-        });*/
+        GenericRecordBuilder beforeValue = new GenericRecordBuilder(schema.getField("value").schema());
+        GenericRecordBuilder afterValue = new GenericRecordBuilder(schema.getField("value").schema());
 
-        return record;
+        System.out.println(schema.getField("before").schema());
+
+        beforeJSON.keys().forEachRemaining(key -> {
+            beforeValue.set(key, beforeJSON.get(key));
+        });
+        before.set("value",beforeValue);
+        afterJSON.keys().forEachRemaining(key -> {
+            afterValue.set(key, afterJSON.get(key));
+        });
+        after.set("value",afterValue);
+
+        envelope.set("before", before);
+        envelope.set("after", after);
+        return envelope;
     }
 }
