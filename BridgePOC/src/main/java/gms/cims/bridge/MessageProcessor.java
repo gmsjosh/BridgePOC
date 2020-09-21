@@ -4,7 +4,6 @@ import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import org.apache.avro.Schema;
-import org.apache.avro.data.Json;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.camel.Exchange;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MessageProcessor implements Processor {
 
@@ -36,11 +34,7 @@ public class MessageProcessor implements Processor {
     }
 
     private GenericData.Record GetRecordFromJsonObject(JSONObject kafkaBodyMessageObject) throws IOException, RestClientException {
-        JSONObject data_before = kafkaBodyMessageObject.getJSONObject("before");
-        JSONObject data_after = kafkaBodyMessageObject.getJSONObject("after");
-
-        GenericRecordBuilder record = SetRecords(data_before, data_after, GetSchema(kafkaBodyMessageObject));
-
+        GenericRecordBuilder record = SetRecords(kafkaBodyMessageObject, GetSchema(kafkaBodyMessageObject));
         return record.build();
     }
 
@@ -62,31 +56,20 @@ public class MessageProcessor implements Processor {
         return 0;
     }
 
-    private GenericRecordBuilder SetRecords(JSONObject beforeJSON, JSONObject afterJSON, Schema schema) {
+    private GenericRecordBuilder SetRecords(JSONObject kafkaBodyMessageObject, Schema schema) {
         GenericRecordBuilder envelope = new GenericRecordBuilder(schema);
-
-        String beforeString = schema.getField("before").schema().toString();
-        beforeString = beforeString.substring(8,beforeString.length()-1);
-        Schema.Parser parser = new Schema.Parser();
-        Schema beforeSchema = parser.parse(beforeString);
-
-        GenericRecordBuilder before = new GenericRecordBuilder(beforeSchema);
-
-        String afterString = schema.getField("after").schema().toString();
-        afterString = afterString.substring(8,afterString.length()-1);
-        Schema afterSchema = parser.parse(beforeString);
-
-        GenericRecordBuilder after = new GenericRecordBuilder(afterSchema);
-
-        beforeJSON.keys().forEachRemaining(key -> {
-            before.set(key, beforeJSON.get(key));
-        });
-        afterJSON.keys().forEachRemaining(key -> {
-            after.set(key, afterJSON.get(key));
-        });
-
+        JSONObject before = kafkaBodyMessageObject.getJSONObject("before");
+        JSONObject after = kafkaBodyMessageObject.getJSONObject("after");
+        Object op = kafkaBodyMessageObject.get("op");
+        Object transaction = kafkaBodyMessageObject.get("transaction");
+        Object ts_ms = kafkaBodyMessageObject.get("ts_ms");
+        JSONObject source = kafkaBodyMessageObject.getJSONObject("source");
         envelope.set("before", before);
         envelope.set("after", after);
+        envelope.set("op", op);
+        envelope.set("transaction", transaction);
+        envelope.set("ts_ms", ts_ms);
+        envelope.set("source", source);
         return envelope;
     }
 }
