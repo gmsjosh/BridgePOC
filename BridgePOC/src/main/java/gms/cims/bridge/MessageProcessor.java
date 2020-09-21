@@ -4,6 +4,7 @@ import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import org.apache.avro.Schema;
+import org.apache.avro.data.Json;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.camel.Exchange;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MessageProcessor implements Processor {
 
@@ -46,7 +48,6 @@ public class MessageProcessor implements Processor {
         JSONObject sourceJSON = kafkaBodyMessageObject.getJSONObject("source");
         SchemaRegistryClient registry = new CachedSchemaRegistryClient(Arguments.SchemaRegistry, Integer.MAX_VALUE);
         int registryID = GetIDFromNamespace(sourceJSON, registry);
-        System.out.println(registry.getById(registryID));
         return registry.getById(registryID);
     }
 
@@ -63,21 +64,26 @@ public class MessageProcessor implements Processor {
 
     private GenericRecordBuilder SetRecords(JSONObject beforeJSON, JSONObject afterJSON, Schema schema) {
         GenericRecordBuilder envelope = new GenericRecordBuilder(schema);
-        GenericRecordBuilder before = new GenericRecordBuilder(schema.getField("before").schema());
-        GenericRecordBuilder after = new GenericRecordBuilder(schema.getField("after").schema());
-        GenericRecordBuilder beforeValue = new GenericRecordBuilder(schema.getField("value").schema());
-        GenericRecordBuilder afterValue = new GenericRecordBuilder(schema.getField("value").schema());
 
-        System.out.println(schema.getField("before").schema());
+        String beforeString = schema.getField("before").schema().toString();
+        beforeString = beforeString.substring(8,beforeString.length()-1);
+        Schema.Parser parser = new Schema.Parser();
+        Schema beforeSchema = parser.parse(beforeString);
+
+        GenericRecordBuilder before = new GenericRecordBuilder(beforeSchema);
+
+        String afterString = schema.getField("after").schema().toString();
+        afterString = afterString.substring(8,afterString.length()-1);
+        Schema afterSchema = parser.parse(beforeString);
+
+        GenericRecordBuilder after = new GenericRecordBuilder(afterSchema);
 
         beforeJSON.keys().forEachRemaining(key -> {
-            beforeValue.set(key, beforeJSON.get(key));
+            before.set(key, beforeJSON.get(key));
         });
-        before.set("value",beforeValue);
         afterJSON.keys().forEachRemaining(key -> {
-            afterValue.set(key, afterJSON.get(key));
+            after.set(key, afterJSON.get(key));
         });
-        after.set("value",afterValue);
 
         envelope.set("before", before);
         envelope.set("after", after);

@@ -1,7 +1,7 @@
 {
     "type": "record",
     "name": "Envelope",
-    "namespace": "CIMSTEST.Customer.ClaimBlackList",
+    "namespace": "CIMSTEST.Financial.ClaimCostPlus",
     "fields": [
         {
             "name": "before",
@@ -12,8 +12,130 @@
                     "name": "Value",
                     "fields": [
                         {
-                            "name": "CO_ContractID",
+                            "name": "CCP_ID",
                             "type": "int"
+                        },
+                        {
+                            "name": "CL_ClaimID",
+                            "type": [
+                                "null",
+                                "int"
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_AdminFee",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_PremTax",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_PremAdmin",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_RST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_GST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_HST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
                         },
                         {
                             "name": "UserID",
@@ -28,15 +150,11 @@
                             }
                         },
                         {
-                            "name": "IsIndividual",
-                            "type": "boolean"
-                        },
-                        {
                             "name": "RowVersion",
                             "type": "bytes"
                         }
                     ],
-                    "connect.name": "CIMSTEST.Customer.ClaimBlackList.Value"
+                    "connect.name": "CIMSTEST.Financial.ClaimCostPlus.Value"
                 }
             ],
             "default": null
@@ -167,12 +285,12 @@
             "default": null
         }
     ],
-    "connect.name": "CIMSTEST.Customer.ClaimBlackList.Envelope"
+    "connect.name": "CIMSTEST.Financial.ClaimCostPlus.Envelope"
 }
-    {
+{
     "type": "record",
     "name": "Envelope",
-    "namespace": "CIMSTEST.Customer.ClaimBlackList",
+    "namespace": "CIMSTEST.Financial.ClaimCostPlus",
     "fields": [
         {
             "name": "before",
@@ -183,8 +301,130 @@
                     "name": "Value",
                     "fields": [
                         {
-                            "name": "CO_ContractID",
+                            "name": "CCP_ID",
                             "type": "int"
+                        },
+                        {
+                            "name": "CL_ClaimID",
+                            "type": [
+                                "null",
+                                "int"
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_AdminFee",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_PremTax",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_PremAdmin",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_RST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_GST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
+                        },
+                        {
+                            "name": "CCP_HST",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "bytes",
+                                    "scale": 2,
+                                    "precision": 18,
+                                    "connect.version": 1,
+                                    "connect.parameters": {
+                                        "scale": "2",
+                                        "connect.decimal.precision": "18"
+                                    },
+                                    "connect.name": "org.apache.kafka.connect.data.Decimal",
+                                    "logicalType": "decimal"
+                                }
+                            ],
+                            "default": null
                         },
                         {
                             "name": "UserID",
@@ -199,15 +439,11 @@
                             }
                         },
                         {
-                            "name": "IsIndividual",
-                            "type": "boolean"
-                        },
-                        {
                             "name": "RowVersion",
                             "type": "bytes"
                         }
                     ],
-                    "connect.name": "CIMSTEST.Customer.ClaimBlackList.Value"
+                    "connect.name": "CIMSTEST.Financial.ClaimCostPlus.Value"
                 }
             ],
             "default": null
@@ -338,5 +574,5 @@
             "default": null
         }
     ],
-    "connect.name": "CIMSTEST.Customer.ClaimBlackList.Envelope"
+    "connect.name": "CIMSTEST.Financial.ClaimCostPlus.Envelope"
 }
