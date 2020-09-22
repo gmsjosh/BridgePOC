@@ -58,18 +58,9 @@ public class MessageProcessor implements Processor {
 
     private GenericRecordBuilder SetRecords(JSONObject kafkaBodyMessageObject, Schema schema) {
         GenericRecordBuilder envelope = new GenericRecordBuilder(schema);
-        JSONObject before = kafkaBodyMessageObject.getJSONObject("before");
-        JSONObject after = kafkaBodyMessageObject.getJSONObject("after");
-        Object op = kafkaBodyMessageObject.get("op");
-        Object transaction = kafkaBodyMessageObject.get("transaction");
-        Object ts_ms = kafkaBodyMessageObject.get("ts_ms");
-        JSONObject source = kafkaBodyMessageObject.getJSONObject("source");
-        envelope.set("before", before);
-        envelope.set("after", after);
-        envelope.set("op", op);
-        envelope.set("transaction", transaction);
-        envelope.set("ts_ms", ts_ms);
-        envelope.set("source", source);
+        kafkaBodyMessageObject.keys().forEachRemaining(key->{
+            envelope.set(key, kafkaBodyMessageObject.get(key));
+        });
         return envelope;
     }
 }

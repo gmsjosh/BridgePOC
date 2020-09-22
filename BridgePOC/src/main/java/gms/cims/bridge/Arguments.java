@@ -1,11 +1,12 @@
 package gms.cims.bridge;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Arguments {
     public static String Broker ="localhost:29092";
-    public static String BlackListTopic = "CIMSTEST.Customer.ClaimBlackList";
-    public static String CCPTopic = "CIMSTEST.Financial.ClaimCostPlus";
-    //public static String DestinationTopic = "Test";
-    public static String DestinationTopic = "CIMSTEST.Test";
+    public static ArrayList<String> Topics = new ArrayList(Arrays.asList("CIMSTEST.Customer.ClaimBlackList", "CIMSTEST.Financial.ClaimCostPlus"));
+    public static String CCPTopic = "CIMSTEST.Financial.ClaimsCostPlus";
     public static String SchemaRegistry = "http://localhost:8081";
     public static String GroupId = "cimstest";
 }

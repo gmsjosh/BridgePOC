@@ -10,6 +10,8 @@
         "database.server.name": "CIMSTEST",
         "table.whitelist": "Customer.ClaimBlackList, Financial.ClaimCostPlus",
         "database.history.kafka.bootstrap.servers": "broker:9092",
-        "database.history.kafka.topic": "dbhistory.CIMS"
+        "database.history.kafka.topic": "dbhistory.CIMS",
+        "decimal.handling.mode": "double",
+        "column.exclude.list": "RowVersion"
     }
 }
