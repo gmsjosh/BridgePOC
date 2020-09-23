@@ -50,6 +50,7 @@ public class KafkaAvroSerializer extends AbstractKafkaAvroSerializer implements 
     @Override
     public void close() {
     }
+
     private  byte[] ConvertToBytes(String subject, final Object o){
 
         Schema schema = null;
