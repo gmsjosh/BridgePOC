@@ -8,7 +8,7 @@
         "database.password": "Debetest01",
         "database.dbname": "CIMS",
         "database.server.name": "CIMSTEST",
-        "table.whitelist": "Reference.ESIClaimFileRecord, Reference.ESIClaimImportDetailType, Reference.ESICoverageCodeAccumLink",
+        "table.whitelist": "Reference.ESIClaimFileRecord, Reference.ESIClaimImportDetailType, Financial.ESIClaimImportDetail",
         "database.history.kafka.bootstrap.servers": "broker:9092",
         "database.history.kafka.topic": "dbhistory.CIMS",
         "decimal.handling.mode": "double"
