@@ -2,6 +2,8 @@ package gms.cims.bridge;
 
 import org.apache.camel.main.Main;
 
+import java.util.stream.Stream;
+
 /**
  * A Camel Application
  */
@@ -12,9 +14,9 @@ public class MainApp {
      */
     public static void main(String... args) throws Exception {
         Main main = new Main();
-        main.configure().addRoutesBuilder(new MyRouteBuilder());
-        /*TableJoiner tableJoiner = new TableJoiner();
-        tableJoiner.startStreamStreamInnerJoin();*/
+        //main.configure().addRoutesBuilder(new MyRouteBuilder());
+        StreamJoiner streamJoiner = new StreamJoiner();
+        streamJoiner.Start();
         main.run(args);
     }
 
