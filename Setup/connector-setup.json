@@ -8,7 +8,7 @@
         "database.password": "Debetest01",
         "database.dbname": "CIMS",
         "database.server.name": "CIMSTEST",
-        "table.whitelist": "Customer.ClaimBlackList, Financial.Claim, Financial.ClaimCase, Financial.ClaimContractLink, Financial.ClaimCostPlus, Financial.ClaimDrug, Financial.ClaimEscAccumDetail, Financial.ClaimNoteLink, Financial.ClaimRefund, Financial.ClaimStatus, Financial.ClaimStatusClaimLink, Financial.ClaimVoucherNoteClaimLink, Reference.ClaimContractRelationships, Reference.ClaimOverrideReason, Reference.ClaimRefundReason, Reference.ClaimState, Reference.ClaimVoucherNote",
+        "table.whitelist": "Reference.ESIClaimFileRecord, Reference.ESIClaimImportDetailType, Reference.ESICoverageCodeAccumLink",
         "database.history.kafka.bootstrap.servers": "broker:9092",
         "database.history.kafka.topic": "dbhistory.CIMS",
         "decimal.handling.mode": "double"
