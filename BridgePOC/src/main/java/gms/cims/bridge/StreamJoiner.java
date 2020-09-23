@@ -34,7 +34,7 @@ public class StreamJoiner {
                 JoinWindows.of(Duration.ofMinutes(5)));*/
 
         topic1.to(outputTopic);
-        topic2.to(outputTopic);
+        //topic2.to(outputTopic);
 
         return builder.build();
     }

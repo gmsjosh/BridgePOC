@@ -1,7 +1,7 @@
 {
     "type": "record",
     "name": "Envelope",
-    "namespace": "CIMSTEST.Financial.ClaimStatusClaimLink",
+    "namespace": "CIMSTEST.Financial.ClaimStatus",
     "fields": [
         {
             "name": "before",
@@ -12,12 +12,16 @@
                     "name": "Value",
                     "fields": [
                         {
-                            "name": "CL_ClaimID",
+                            "name": "CS_ClaimStatusID",
                             "type": "int"
                         },
                         {
-                            "name": "CS_ClaimStatusID",
-                            "type": "int"
+                            "name": "CS_Description",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "default": null
                         },
                         {
                             "name": "UserID",
@@ -36,7 +40,7 @@
                             "type": "bytes"
                         }
                     ],
-                    "connect.name": "CIMSTEST.Financial.ClaimStatusClaimLink.Value"
+                    "connect.name": "CIMSTEST.Financial.ClaimStatus.Value"
                 }
             ],
             "default": null
@@ -167,5 +171,5 @@
             "default": null
         }
     ],
-    "connect.name": "CIMSTEST.Financial.ClaimStatusClaimLink.Envelope"
+    "connect.name": "CIMSTEST.Financial.ClaimStatus.Envelope"
 }
