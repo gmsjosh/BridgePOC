@@ -27,17 +27,14 @@ public class StreamJoiner {
         return builder.build();
     }
 
-    public void Start() throws Exception {
+    public void Start() {
 
         Topology topology = buildTopology();
         Properties props = new Properties();
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, Arguments.GroupId);
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "hello_world1");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Arguments.Broker);
         props.put("schema.registry.url", Arguments.SchemaRegistry);
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
-
 
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);
