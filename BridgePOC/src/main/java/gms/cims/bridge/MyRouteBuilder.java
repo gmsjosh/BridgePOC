@@ -16,9 +16,9 @@ public class MyRouteBuilder extends RouteBuilder {
     public void configure() {
         TopicSetup().forEach(topic -> {
             from(topic).process(new MessageProcessor())
-                    .log("Message received : ${body}");
-                    /*.to("kafka:" + Arguments.DestinationTopic + "?brokers=" + Arguments.Broker
-                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());*/
+                    .log("Message received : ${body}")
+                    .to("kafka:" + "CIMSTEST.Test" + "?brokers=" + Arguments.Broker
+                        + "&serializerClass=" + KafkaAvroSerializer.class.getName());
         });
     }
 

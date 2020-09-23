@@ -2,6 +2,7 @@ package gms.cims.bridge;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.streams.KafkaStreams;
@@ -16,9 +17,6 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
 public class StreamJoiner {
-
-    private Serializer<Object> KafkaAvroSerializer = new KafkaAvroSerializer();
-    private Deserializer<Object> KafkaAvroDeserializer = new KafkaAvroDeserializer();
 
     public Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
@@ -46,10 +44,10 @@ public class StreamJoiner {
         Topology topology = buildTopology();
         Properties props = new Properties();
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "hello_world2");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "hello_world3");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Arguments.Broker);
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.serdeFrom(KafkaAvroSerializer, KafkaAvroDeserializer));
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaAvroSerde.class);
 
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);

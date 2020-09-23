@@ -1,6 +1,5 @@
 package gms.cims.bridge;
 
-
 import io.confluent.common.config.ConfigException;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
@@ -51,7 +50,7 @@ public class KafkaAvroSerializer extends AbstractKafkaAvroSerializer implements 
     public void close() {
     }
 
-    private  byte[] ConvertToBytes(String subject, final Object o){
+    private byte[] ConvertToBytes(String subject, final Object o){
 
         Schema schema = null;
         if (o == null) {

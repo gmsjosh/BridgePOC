@@ -11,5 +11,4 @@ public class Arguments {
     ));
     public static String SchemaRegistry = "http://localhost:8081";
     public static String GroupId = "cimstest";
-    public static String Hostname = "localhost";
 }
