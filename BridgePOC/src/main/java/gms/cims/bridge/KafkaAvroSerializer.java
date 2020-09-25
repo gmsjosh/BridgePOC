@@ -31,6 +31,7 @@ public class KafkaAvroSerializer extends AbstractKafkaAvroSerializer implements 
         try {
             final List<String> schema = Collections.singletonList(Arguments.SchemaRegistry);
             this.schemaRegistry = new CachedSchemaRegistryClient(schema, Integer.MAX_VALUE);
+            this.autoRegisterSchema = true;
         } catch (ConfigException e) {
             throw new org.apache.kafka.common.config.ConfigException(e.getMessage());
         }

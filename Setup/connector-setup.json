@@ -9,8 +9,13 @@
         "database.dbname": "CIMS",
         "database.server.name": "CIMSTEST",
         "table.whitelist": "Financial.ClaimStatus, Financial.ClaimStatusClaimLink",
+        "column.blacklist": ".*\\..*\\.RowVersion, .*\\..*\\.LastUpdate, .*\\..*\\.UserID",
         "database.history.kafka.bootstrap.servers": "broker:9092",
         "database.history.kafka.topic": "dbhistory.CIMS",
-        "decimal.handling.mode": "double"
+        "decimal.handling.mode": "double",
+        "transforms": "unwrap",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite"
     }
 }
