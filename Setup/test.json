@@ -1,39 +1,16 @@
 {
-    "name": "after",
-    "namespace": "record",
-    "type": [
-        "null",
-        {
-            "type": "record",
-            "name": "Value",
-            "fields": [
-                {
-                    "name": "CL_ClaimID",
-                    "type": "int"
-                },
-                {
-                    "name": "CS_ClaimStatusID",
-                    "type": "int"
-                },
-                {
-                    "name": "UserID",
-                    "type": "string"
-                },
-                {
-                    "name": "LastUpdate",
-                    "type": {
-                        "type": "long",
-                        "connect.version": 1,
-                        "connect.name": "io.debezium.time.Timestamp"
-                    }
-                },
-                {
-                    "name": "RowVersion",
-                    "type": "bytes"
-                }
-            ],
-            "connect.name": "CIMSTEST.Financial.ClaimStatusClaimLink.Value"
+    "type": "record",
+    "name": "Key",
+    "namespace": "CIMSTEST.Financial.ClaimStatusClaimLink",
+    "fields": [
+        "0": {
+    "name": "CL_ClaimID",
+    "type": "int"
+        },
+        "1": {
+    "name": "CS_ClaimStatusID",
+    "type": "int"
         }
     ],
-    "default": null
+    "connect.name": "CIMSTEST.Financial.ClaimStatusClaimLink.Key"
 }

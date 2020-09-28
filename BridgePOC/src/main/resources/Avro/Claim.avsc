@@ -1,22 +1,11 @@
 {
   "type": "record",
-  "name": "Claim",
-  "namespace": "com.kafka.model",
+  "namespace": "gms.cims.bridge",
+  "name": "claim",
   "fields": [
-    {"name":"RecordType", "type":"int"},
-    {"name":"PharmacyNumber", "type":"string"},
-    {"name":"ClaimStatus", "type":"int"},
-    {"name":"DateClaimReceivedatESICanada", "type":"string"},
-    {"name":"DateProcessedOrAdjudicated", "type":"int"},
-    {"name":"PrescriptionNumber", "type":"int"},
-    {"name":"DateofService", "type":"int"},
-    {"name":"DrugDescriptionEnglish", "type":"string"},
-    {"name":"ClientFirstName", "type":"string"},
-    {"name":"PatientFirstName", "type":"string"},
-    {"name":"ClientID", "type":"int"},
-    {"name":"CustomerID", "type":"int"},
-    {"name":"SubmittedTotalAmountClaimed", "type":"int"},
-    {"name":"PaymentMethod", "type":"int"},
-    {"name":"PharmacistID", "type":"string"}
+    {"name":"CL_ClaimID", "type":"int", "default": "undefined"},
+    {"name":"CS_ClaimStatusID", "type":"int", "default": "undefined"},
+    {"name":"CS_Description", "type":"string", "default": "undefined"},
+    {"name":"__deleted", "type":"string", "default": "undefined"},
   ]
 }

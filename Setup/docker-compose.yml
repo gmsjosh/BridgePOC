@@ -57,7 +57,6 @@ services:
     ports:
       - "8083:8083"
     volumes:
-      - mi2:/usr/share/java/monitoring-interceptors/
       - D:\debezium-connector-sqlserver:/usr/share/java/debezium-connector-sqlserver
     environment:
       CONNECT_BOOTSTRAP_SERVERS: "broker:9092"
@@ -125,6 +124,3 @@ services:
   #     MYSQL_PASSWORD: admin
   #     MYSQL_ROOT_PASSWORD: admin
   #     MYSQL_DATABASE: Travel_Advisory
- 
-volumes:
-  mi2: {}
