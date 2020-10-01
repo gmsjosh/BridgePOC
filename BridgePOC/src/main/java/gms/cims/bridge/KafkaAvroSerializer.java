@@ -16,6 +16,7 @@ import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -28,10 +29,10 @@ public class KafkaAvroSerializer extends AbstractKafkaAvroSerializer implements 
 
     @Override
     protected void configure(KafkaAvroSerializerConfig config) {
+        this.autoRegisterSchema = true;
         try {
             final List<String> schema = Collections.singletonList(Arguments.SchemaRegistry);
             this.schemaRegistry = new CachedSchemaRegistryClient(schema, Integer.MAX_VALUE);
-            this.autoRegisterSchema = true;
         } catch (ConfigException e) {
             throw new org.apache.kafka.common.config.ConfigException(e.getMessage());
         }

@@ -2,7 +2,7 @@
     "name": "cims-connector",
     "config": {
         "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
-        "database.hostname": "172.16.86.9",
+        "database.hostname": "172.16.6.68",
         "database.port": "1433",
         "database.user": "debezium",
         "database.password": "Debetest01",

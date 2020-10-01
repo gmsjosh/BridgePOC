@@ -1,23 +1,15 @@
 package gms.cims.bridge;
 
-import com.google.gson.JsonObject;
-import org.apache.avro.generic.GenericContainer;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.JoinWindows;
-import org.apache.kafka.streams.kstream.KStream;
-import org.json.JSONArray;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+
+import org.apache.kafka.streams.*;
+import org.apache.kafka.streams.kstream.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-import javax.sql.rowset.serial.SerialException;
-import java.time.Duration;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 
 public class StreamJoiner {
 
@@ -26,40 +18,85 @@ public class StreamJoiner {
         Topology topology = buildTopology();
         Properties props = new Properties();
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "hello_world5");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "claim-creator");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Arguments.Broker);
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, KafkaAvroSerde.class);
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaAvroSerde.class);
 
         final KafkaStreams streams = new KafkaStreams(topology, props);
-        final CountDownLatch latch = new CountDownLatch(1);
 
-        try {
-            streams.start();
-            latch.await();
-        } catch (Throwable e) {
-            System.exit(1);
-        }
-        System.exit(0);
+        streams.cleanUp();
+        streams.start();
+        System.out.println(streams.toString());
+        Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 
-    public Topology buildTopology() {
+    private Topology buildTopology() {
+        //topic2.print(Printed.toSysOut());
+        //[ClaimStatus: {"CS_ClaimStatusID": 12288}, {"CS_ClaimStatusID": 12288, "CS_Description": "Claim contains invalid drugs                                                                        ", "__deleted": "false"}
+        //ClaimStatusClaimLink: {"CL_ClaimID": 12229719, "CS_ClaimStatusID": 26711}, {"CL_ClaimID": 12229719, "CS_ClaimStatusID": 26711, "__deleted": "false"}
         StreamsBuilder builder = new StreamsBuilder();
-        final String outputTopic = "claim-topic";
+        KStream<GenericRecord, GenericRecord> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
+        KStream<GenericRecord, GenericRecord> topic2 = builder.stream("CIMSTEST.Financial.ClaimStatusClaimLink");
 
-        KStream<Object, Object> topic2 = builder.stream("CIMSTEST.Financial.ClaimStatusClaimLink");
-        KStream<Object, Object> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
+        KTable<Integer, GenericRecord> moddedTopic1 = topic1.map((key, value) -> KeyValue.pair(((Integer) (key.get("CS_ClaimStatusID"))), value)).toTable();
+        KTable<Integer, GenericRecord> moddedTopic2 = topic2.map((key, value) -> KeyValue.pair(((Integer) (key.get("CS_ClaimStatusID"))), value)).toTable();
 
-        KStream<Object, Object> output = topic1.outerJoin(
-            topic2,
-            (leftValue, rightValue) -> {
-                if (leftValue==null) { return ("{left:{}" + ",right:" + rightValue + "}"); }
-                else if (rightValue==null) { return ("{left:" + leftValue + ",right:{}}"); }
-                else { return ("{left:" + leftValue + ",right:" + rightValue + "}"); }
-            },
-            JoinWindows.of(Duration.ofMinutes(5)));
+        KTable<Integer, Claim> joined = moddedTopic2.join(moddedTopic1,
+                (left,right) -> {
+                    JSONObject leftJSON = new JSONObject(left.toString());
+                    JSONObject rightJSON = new JSONObject(right.toString());
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Claim claim = new Claim();
 
-        output.to(outputTopic);
+                    leftJSON.keys().forEachRemaining(k -> {
+                        if (!rightJSON.has(k)) {
+                            rightJSON.put(k, leftJSON.get(k));
+                        }
+                    });
+
+                    try {
+                        claim = objectMapper.readValue(rightJSON.toString(), Claim.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    /*leftJSON.keys().forEachRemaining(k -> {
+                        if (!rightJSON.has(k)) {
+                            rightJSON.put(k, leftJSON.get(k));
+                        }
+                    });
+                    right.put("CL_ClaimID", 9);
+                    System.out.println(right.toString());*/
+                    return claim;
+                }
+        );
+
+        joined.toStream().to(Arguments.outputTopic);
+
+
+        /*ArrayList<KStream> streams = new ArrayList<>();
+        ArrayList<KStream> splitStreams = new ArrayList<>();
+        Arguments.Topics.forEach(topic -> streams.add(builder.stream(topic)));
+
+        streams.forEach(stream -> {
+            splitStreams.add(stream.flatMap(
+                    (key, value) -> {
+                        List<KeyValue<Object, Object>> result = new LinkedList<>();
+                        new JSONObject(key.toString()).keys().forEachRemaining(k -> {
+                            result.add(KeyValue.pair(((Object) new JSONObject("{" + k + ": " + new JSONObject(key.toString()).get(k) + "}").toString()), value));
+                        });
+                        return result;
+                    })
+            );
+        });
+
+        KStream joined = splitStreams.get(0).join(splitStreams.get(1),
+                (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue,
+                JoinWindows.of(Duration.ofMinutes(5))
+        );*/
+
+        //joined.to("output-topic");
 
         return builder.build();
     }

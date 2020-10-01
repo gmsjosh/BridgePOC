@@ -1,11 +1,11 @@
 {
   "type": "record",
   "namespace": "gms.cims.bridge",
-  "name": "claim",
+  "name": "Claim",
   "fields": [
-    {"name":"CL_ClaimID", "type":"int", "default": "undefined"},
-    {"name":"CS_ClaimStatusID", "type":"int", "default": "undefined"},
-    {"name":"CS_Description", "type":"string", "default": "undefined"},
-    {"name":"__deleted", "type":"string", "default": "undefined"},
+    {"name":"CL_ClaimID", "type":["int", "null"], "default": -1},
+    {"name":"CS_ClaimStatusID", "type":["int", "null"], "default": -1},
+    {"name":"CS_Description", "type":["string", "null"], "default": "NONE"},
+    {"name":"__deleted", "type":["string", "null"]}
   ]
 }
