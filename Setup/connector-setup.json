@@ -15,7 +15,6 @@
         "decimal.handling.mode": "double",
         "transforms": "unwrap",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-        "transforms.unwrap.drop.tombstones": "false",
-        "transforms.unwrap.delete.handling.mode": "rewrite"
+        "transforms.unwrap.drop.tombstones": "false"
     }
 }

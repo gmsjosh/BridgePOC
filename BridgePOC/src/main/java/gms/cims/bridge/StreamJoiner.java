@@ -61,13 +61,7 @@ public class StreamJoiner {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    /*leftJSON.keys().forEachRemaining(k -> {
-                        if (!rightJSON.has(k)) {
-                            rightJSON.put(k, leftJSON.get(k));
-                        }
-                    });
-                    right.put("CL_ClaimID", 9);
-                    System.out.println(right.toString());*/
+
                     return claim;
                 }
         );

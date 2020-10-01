@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Claim extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 286019745831080538L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Claim\",\"namespace\":\"gms.cims.bridge\",\"fields\":[{\"name\":\"CL_ClaimID\",\"type\":[\"int\",\"null\"],\"default\":-1},{\"name\":\"CS_ClaimStatusID\",\"type\":[\"int\",\"null\"],\"default\":-1},{\"name\":\"CS_Description\",\"type\":[\"string\",\"null\"],\"default\":\"NONE\"},{\"name\":\"__deleted\",\"type\":[\"string\",\"null\"]}]}");
+  private static final long serialVersionUID = -4542698545807183305L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Claim\",\"namespace\":\"gms.cims.bridge\",\"fields\":[{\"name\":\"CL_ClaimID\",\"type\":[\"int\",\"null\"],\"default\":-1},{\"name\":\"CS_ClaimStatusID\",\"type\":[\"int\",\"null\"],\"default\":-1},{\"name\":\"CS_Description\",\"type\":[\"string\",\"null\"],\"default\":\"NONE\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -54,7 +54,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
   @Deprecated public java.lang.Integer CL_ClaimID;
   @Deprecated public java.lang.Integer CS_ClaimStatusID;
   @Deprecated public java.lang.CharSequence CS_Description;
-  @Deprecated public java.lang.CharSequence __deleted;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -68,13 +67,11 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
    * @param CL_ClaimID The new value for CL_ClaimID
    * @param CS_ClaimStatusID The new value for CS_ClaimStatusID
    * @param CS_Description The new value for CS_Description
-   * @param __deleted The new value for __deleted
    */
-  public Claim(java.lang.Integer CL_ClaimID, java.lang.Integer CS_ClaimStatusID, java.lang.CharSequence CS_Description, java.lang.CharSequence __deleted) {
+  public Claim(java.lang.Integer CL_ClaimID, java.lang.Integer CS_ClaimStatusID, java.lang.CharSequence CS_Description) {
     this.CL_ClaimID = CL_ClaimID;
     this.CS_ClaimStatusID = CS_ClaimStatusID;
     this.CS_Description = CS_Description;
-    this.__deleted = __deleted;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -84,7 +81,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
     case 0: return CL_ClaimID;
     case 1: return CS_ClaimStatusID;
     case 2: return CS_Description;
-    case 3: return __deleted;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -96,7 +92,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
     case 0: CL_ClaimID = (java.lang.Integer)value$; break;
     case 1: CS_ClaimStatusID = (java.lang.Integer)value$; break;
     case 2: CS_Description = (java.lang.CharSequence)value$; break;
-    case 3: __deleted = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -150,22 +145,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   /**
-   * Gets the value of the '__deleted' field.
-   * @return The value of the '__deleted' field.
-   */
-  public java.lang.CharSequence getDeleted$1() {
-    return __deleted;
-  }
-
-  /**
-   * Sets the value of the '__deleted' field.
-   * @param value the value to set.
-   */
-  public void setDeleted$1(java.lang.CharSequence value) {
-    this.__deleted = value;
-  }
-
-  /**
    * Creates a new Claim RecordBuilder.
    * @return A new Claim RecordBuilder
    */
@@ -200,7 +179,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
     private java.lang.Integer CL_ClaimID;
     private java.lang.Integer CS_ClaimStatusID;
     private java.lang.CharSequence CS_Description;
-    private java.lang.CharSequence __deleted;
 
     /** Creates a new Builder */
     private Builder() {
@@ -225,10 +203,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
         this.CS_Description = data().deepCopy(fields()[2].schema(), other.CS_Description);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.__deleted)) {
-        this.__deleted = data().deepCopy(fields()[3].schema(), other.__deleted);
-        fieldSetFlags()[3] = true;
-      }
     }
 
     /**
@@ -248,10 +222,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
       if (isValidValue(fields()[2], other.CS_Description)) {
         this.CS_Description = data().deepCopy(fields()[2].schema(), other.CS_Description);
         fieldSetFlags()[2] = true;
-      }
-      if (isValidValue(fields()[3], other.__deleted)) {
-        this.__deleted = data().deepCopy(fields()[3].schema(), other.__deleted);
-        fieldSetFlags()[3] = true;
       }
     }
 
@@ -372,45 +342,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
       return this;
     }
 
-    /**
-      * Gets the value of the '__deleted' field.
-      * @return The value.
-      */
-    public java.lang.CharSequence getDeleted$1() {
-      return __deleted;
-    }
-
-    /**
-      * Sets the value of the '__deleted' field.
-      * @param value The value of '__deleted'.
-      * @return This builder.
-      */
-    public gms.cims.bridge.Claim.Builder setDeleted$1(java.lang.CharSequence value) {
-      validate(fields()[3], value);
-      this.__deleted = value;
-      fieldSetFlags()[3] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the '__deleted' field has been set.
-      * @return True if the '__deleted' field has been set, false otherwise.
-      */
-    public boolean hasDeleted$1() {
-      return fieldSetFlags()[3];
-    }
-
-
-    /**
-      * Clears the value of the '__deleted' field.
-      * @return This builder.
-      */
-    public gms.cims.bridge.Claim.Builder clearDeleted$1() {
-      __deleted = null;
-      fieldSetFlags()[3] = false;
-      return this;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public Claim build() {
@@ -419,7 +350,6 @@ public class Claim extends org.apache.avro.specific.SpecificRecordBase implement
         record.CL_ClaimID = fieldSetFlags()[0] ? this.CL_ClaimID : (java.lang.Integer) defaultValue(fields()[0]);
         record.CS_ClaimStatusID = fieldSetFlags()[1] ? this.CS_ClaimStatusID : (java.lang.Integer) defaultValue(fields()[1]);
         record.CS_Description = fieldSetFlags()[2] ? this.CS_Description : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.__deleted = fieldSetFlags()[3] ? this.__deleted : (java.lang.CharSequence) defaultValue(fields()[3]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

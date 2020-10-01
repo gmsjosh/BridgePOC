@@ -5,7 +5,6 @@
   "fields": [
     {"name":"CL_ClaimID", "type":["int", "null"], "default": -1},
     {"name":"CS_ClaimStatusID", "type":["int", "null"], "default": -1},
-    {"name":"CS_Description", "type":["string", "null"], "default": "NONE"},
-    {"name":"__deleted", "type":["string", "null"]}
+    {"name":"CS_Description", "type":["string", "null"], "default": "NONE"}
   ]
 }
