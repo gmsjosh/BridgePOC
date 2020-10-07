@@ -25,19 +25,28 @@ public class StreamJoiner {
         Topology topology = buildTopology();
         Properties props = buildProperties();
 
-        /*StoreBuilder inMemoryStore = Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore("inmemory-store"),
+        StoreBuilder processingStore = Stores.keyValueStoreBuilder(
+                Stores.inMemoryKeyValueStore("processingStore"),
+                Serdes.String(),
+                Serdes.String()
+        );
+
+        StoreBuilder outputStore = Stores.keyValueStoreBuilder(
+                Stores.inMemoryKeyValueStore("outputStore"),
                 Serdes.String(),
                 Serdes.String()
         );
 
         topology.addSource(
                 "Source",
+                "CIMSTEST.Financial.ClaimStatus",
                 "CIMSTEST.Financial.ClaimStatusClaimLink",
-                "CIMSTEST.Financial.ClaimStatus")
+                "CIMSTEST.Financial.ClaimCostPlus",
+                "CIMSTEST.Customer.ClaimBlackList")
                 .addProcessor("Process", () -> new MergedMessageProcessor(), "Source")
-                .addStateStore(inMemoryStore, "Process")
-                .addSink("Sink", "sink-topic", "Process");*/
+                .addStateStore(processingStore, "Process")
+                .addStateStore(outputStore, "Process")
+                .addSink("Sink", "sink-topic", "Process");
 
         final KafkaStreams streams = new KafkaStreams(topology, props);
 
@@ -67,8 +76,8 @@ public class StreamJoiner {
         //keySetStreams.get(0).print(Printed.toSysOut());
         //keySetStreams.get(1).print(Printed.toSysOut());
 
-        KStream<GenericRecord, ClaimStatus> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
-        KTable<Integer, ClaimStatus> moddedTopic1 = topic1.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
+        //KStream<GenericRecord, ClaimStatus> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
+        //KTable<Integer, ClaimStatus> moddedTopic1 = topic1.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
 
         //KStream<GenericRecord, ClaimStatusClaimLink> topic2 = builder.stream("CIMSTEST.Financial.ClaimStatusClaimLink");
         //KTable<Integer, ClaimStatusClaimLink> moddedTopic2 = topic2.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
