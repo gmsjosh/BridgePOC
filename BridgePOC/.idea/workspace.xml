@@ -5,9 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63abd9c9-ec5e-48b0-8c05-39d3614f1aaf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/CIMSTEST/Customer/ClaimBlackList/ClaimBlackList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/CIMSTEST/Financial/ClaimCostPlus/ClaimCostPlus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/SchemaRegistryName.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/gms/cims/bridge/Claim.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/gms/cims/bridge/ClaimStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/gms/cims/bridge/ClaimStatusClaimLink.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/log4j2.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/StreamJoiner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gms/cims/bridge/StreamJoiner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/Claim.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/Claim.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimBlackList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimBlackList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimCostPlus.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimCostPlus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimStatusClaimLink.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/ClaimStatusClaimLink.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/java/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/java/main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/Claim.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/Claim.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimBlackList.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimBlackList.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimCostPlus.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimCostPlus.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimStatus.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimStatus.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimStatusClaimLink.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/src/main/resources/Avro/ClaimStatusClaimLink.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/Claim.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/Claim.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimBlackList.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimBlackList.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimCostPlus.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimCostPlus.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimStatus.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimStatus.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimStatusClaimLink.avsc" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/Avro/ClaimStatusClaimLink.avsc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/classes/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/classes/main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stream-transformer/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../stream-transformer/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "Output",
+  "fields": [
+    {"name":"CL_ClaimID", "type":"int"},
+    {"name":"CS_ClaimStatusID", "type":"int"},
+    {"name":"CS_Description", "type":"string"}
+  ]
+}

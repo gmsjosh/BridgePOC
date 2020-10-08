@@ -11,23 +11,23 @@ import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 3011633215867085531L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ClaimStatusClaimLink\",\"fields\":[{\"name\":\"CL_ClaimID\",\"type\":\"int\"},{\"name\":\"CS_ClaimStatusID\",\"type\":\"int\"}],\"connect.name\":\"CIMSTEST.Financial.ClaimStatusClaimLink.Value\"}");
+class Output extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = -2969263115400203982L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Output\",\"fields\":[{\"name\":\"CL_ClaimID\",\"type\":\"int\"},{\"name\":\"CS_ClaimStatusID\",\"type\":\"int\"},{\"name\":\"CS_Description\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<ClaimStatusClaimLink> ENCODER =
-      new BinaryMessageEncoder<ClaimStatusClaimLink>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<Output> ENCODER =
+      new BinaryMessageEncoder<Output>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<ClaimStatusClaimLink> DECODER =
-      new BinaryMessageDecoder<ClaimStatusClaimLink>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<Output> DECODER =
+      new BinaryMessageDecoder<Output>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
    */
-  public static BinaryMessageDecoder<ClaimStatusClaimLink> getDecoder() {
+  public static BinaryMessageDecoder<Output> getDecoder() {
     return DECODER;
   }
 
@@ -35,39 +35,42 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
-  public static BinaryMessageDecoder<ClaimStatusClaimLink> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<ClaimStatusClaimLink>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<Output> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<Output>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this ClaimStatusClaimLink to a ByteBuffer. */
+  /** Serializes this Output to a ByteBuffer. */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a ClaimStatusClaimLink from a ByteBuffer. */
-  public static ClaimStatusClaimLink fromByteBuffer(
+  /** Deserializes a Output from a ByteBuffer. */
+  public static Output fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
   @Deprecated public int CL_ClaimID;
   @Deprecated public int CS_ClaimStatusID;
+  @Deprecated public java.lang.CharSequence CS_Description;
 
   /**
    * Default constructor.  Note that this does not initialize fields
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public ClaimStatusClaimLink() {}
+  public Output() {}
 
   /**
    * All-args constructor.
    * @param CL_ClaimID The new value for CL_ClaimID
    * @param CS_ClaimStatusID The new value for CS_ClaimStatusID
+   * @param CS_Description The new value for CS_Description
    */
-  public ClaimStatusClaimLink(java.lang.Integer CL_ClaimID, java.lang.Integer CS_ClaimStatusID) {
+  public Output(java.lang.Integer CL_ClaimID, java.lang.Integer CS_ClaimStatusID, java.lang.CharSequence CS_Description) {
     this.CL_ClaimID = CL_ClaimID;
     this.CS_ClaimStatusID = CS_ClaimStatusID;
+    this.CS_Description = CS_Description;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -76,6 +79,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
     switch (field$) {
     case 0: return CL_ClaimID;
     case 1: return CS_ClaimStatusID;
+    case 2: return CS_Description;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -86,6 +90,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
     switch (field$) {
     case 0: CL_ClaimID = (java.lang.Integer)value$; break;
     case 1: CS_ClaimStatusID = (java.lang.Integer)value$; break;
+    case 2: CS_Description = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -123,39 +128,56 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
   }
 
   /**
-   * Creates a new ClaimStatusClaimLink RecordBuilder.
-   * @return A new ClaimStatusClaimLink RecordBuilder
+   * Gets the value of the 'CS_Description' field.
+   * @return The value of the 'CS_Description' field.
    */
-  public static ClaimStatusClaimLink.Builder newBuilder() {
-    return new ClaimStatusClaimLink.Builder();
+  public java.lang.CharSequence getCSDescription() {
+    return CS_Description;
   }
 
   /**
-   * Creates a new ClaimStatusClaimLink RecordBuilder by copying an existing Builder.
+   * Sets the value of the 'CS_Description' field.
+   * @param value the value to set.
+   */
+  public void setCSDescription(java.lang.CharSequence value) {
+    this.CS_Description = value;
+  }
+
+  /**
+   * Creates a new Output RecordBuilder.
+   * @return A new Output RecordBuilder
+   */
+  public static Output.Builder newBuilder() {
+    return new Output.Builder();
+  }
+
+  /**
+   * Creates a new Output RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new ClaimStatusClaimLink RecordBuilder
+   * @return A new Output RecordBuilder
    */
-  public static ClaimStatusClaimLink.Builder newBuilder(ClaimStatusClaimLink.Builder other) {
-    return new ClaimStatusClaimLink.Builder(other);
+  public static Output.Builder newBuilder(Output.Builder other) {
+    return new Output.Builder(other);
   }
 
   /**
-   * Creates a new ClaimStatusClaimLink RecordBuilder by copying an existing ClaimStatusClaimLink instance.
+   * Creates a new Output RecordBuilder by copying an existing Output instance.
    * @param other The existing instance to copy.
-   * @return A new ClaimStatusClaimLink RecordBuilder
+   * @return A new Output RecordBuilder
    */
-  public static ClaimStatusClaimLink.Builder newBuilder(ClaimStatusClaimLink other) {
-    return new ClaimStatusClaimLink.Builder(other);
+  public static Output.Builder newBuilder(Output other) {
+    return new Output.Builder(other);
   }
 
   /**
-   * RecordBuilder for ClaimStatusClaimLink instances.
+   * RecordBuilder for Output instances.
    */
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<ClaimStatusClaimLink>
-    implements org.apache.avro.data.RecordBuilder<ClaimStatusClaimLink> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Output>
+    implements org.apache.avro.data.RecordBuilder<Output> {
 
     private int CL_ClaimID;
     private int CS_ClaimStatusID;
+    private java.lang.CharSequence CS_Description;
 
     /** Creates a new Builder */
     private Builder() {
@@ -166,7 +188,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(ClaimStatusClaimLink.Builder other) {
+    private Builder(Output.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.CL_ClaimID)) {
         this.CL_ClaimID = data().deepCopy(fields()[0].schema(), other.CL_ClaimID);
@@ -176,13 +198,17 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
         this.CS_ClaimStatusID = data().deepCopy(fields()[1].schema(), other.CS_ClaimStatusID);
         fieldSetFlags()[1] = true;
       }
+      if (isValidValue(fields()[2], other.CS_Description)) {
+        this.CS_Description = data().deepCopy(fields()[2].schema(), other.CS_Description);
+        fieldSetFlags()[2] = true;
+      }
     }
 
     /**
-     * Creates a Builder by copying an existing ClaimStatusClaimLink instance
+     * Creates a Builder by copying an existing Output instance
      * @param other The existing instance to copy.
      */
-    private Builder(ClaimStatusClaimLink other) {
+    private Builder(Output other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.CL_ClaimID)) {
         this.CL_ClaimID = data().deepCopy(fields()[0].schema(), other.CL_ClaimID);
@@ -191,6 +217,10 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
       if (isValidValue(fields()[1], other.CS_ClaimStatusID)) {
         this.CS_ClaimStatusID = data().deepCopy(fields()[1].schema(), other.CS_ClaimStatusID);
         fieldSetFlags()[1] = true;
+      }
+      if (isValidValue(fields()[2], other.CS_Description)) {
+        this.CS_Description = data().deepCopy(fields()[2].schema(), other.CS_Description);
+        fieldSetFlags()[2] = true;
       }
     }
 
@@ -207,7 +237,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
       * @param value The value of 'CL_ClaimID'.
       * @return This builder.
       */
-    public ClaimStatusClaimLink.Builder setCLClaimID(int value) {
+    public Output.Builder setCLClaimID(int value) {
       validate(fields()[0], value);
       this.CL_ClaimID = value;
       fieldSetFlags()[0] = true;
@@ -227,7 +257,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
       * Clears the value of the 'CL_ClaimID' field.
       * @return This builder.
       */
-    public ClaimStatusClaimLink.Builder clearCLClaimID() {
+    public Output.Builder clearCLClaimID() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -245,7 +275,7 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
       * @param value The value of 'CS_ClaimStatusID'.
       * @return This builder.
       */
-    public ClaimStatusClaimLink.Builder setCSClaimStatusID(int value) {
+    public Output.Builder setCSClaimStatusID(int value) {
       validate(fields()[1], value);
       this.CS_ClaimStatusID = value;
       fieldSetFlags()[1] = true;
@@ -265,18 +295,58 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
       * Clears the value of the 'CS_ClaimStatusID' field.
       * @return This builder.
       */
-    public ClaimStatusClaimLink.Builder clearCSClaimStatusID() {
+    public Output.Builder clearCSClaimStatusID() {
       fieldSetFlags()[1] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'CS_Description' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getCSDescription() {
+      return CS_Description;
+    }
+
+    /**
+      * Sets the value of the 'CS_Description' field.
+      * @param value The value of 'CS_Description'.
+      * @return This builder.
+      */
+    public Output.Builder setCSDescription(java.lang.CharSequence value) {
+      validate(fields()[2], value);
+      this.CS_Description = value;
+      fieldSetFlags()[2] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'CS_Description' field has been set.
+      * @return True if the 'CS_Description' field has been set, false otherwise.
+      */
+    public boolean hasCSDescription() {
+      return fieldSetFlags()[2];
+    }
+
+
+    /**
+      * Clears the value of the 'CS_Description' field.
+      * @return This builder.
+      */
+    public Output.Builder clearCSDescription() {
+      CS_Description = null;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public ClaimStatusClaimLink build() {
+    public Output build() {
       try {
-        ClaimStatusClaimLink record = new ClaimStatusClaimLink();
+        Output record = new Output();
         record.CL_ClaimID = fieldSetFlags()[0] ? this.CL_ClaimID : (java.lang.Integer) defaultValue(fields()[0]);
         record.CS_ClaimStatusID = fieldSetFlags()[1] ? this.CS_ClaimStatusID : (java.lang.Integer) defaultValue(fields()[1]);
+        record.CS_Description = fieldSetFlags()[2] ? this.CS_Description : (java.lang.CharSequence) defaultValue(fields()[2]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
@@ -285,8 +355,8 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<ClaimStatusClaimLink>
-    WRITER$ = (org.apache.avro.io.DatumWriter<ClaimStatusClaimLink>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<Output>
+    WRITER$ = (org.apache.avro.io.DatumWriter<Output>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -294,8 +364,8 @@ public class ClaimStatusClaimLink extends org.apache.avro.specific.SpecificRecor
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<ClaimStatusClaimLink>
-    READER$ = (org.apache.avro.io.DatumReader<ClaimStatusClaimLink>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<Output>
+    READER$ = (org.apache.avro.io.DatumReader<Output>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {
