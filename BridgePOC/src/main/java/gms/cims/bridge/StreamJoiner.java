@@ -24,36 +24,6 @@ public class StreamJoiner {
 
         Topology topology = buildTopology();
         Properties props = buildProperties();
-
-        StoreBuilder processingStore = Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore("processingStore"),
-                Serdes.String(),
-                Serdes.String()
-        );
-
-        StoreBuilder outputStore = Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore("outputStore"),
-                Serdes.String(),
-                Serdes.String()
-        );
-
-        StoreBuilder test = Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore("outputStore"),
-                Serdes.String(),
-                Serdes.String()
-        );
-
-        topology.addSource(
-                "Source",
-                "CIMSTEST.Financial.ClaimStatus",
-                "CIMSTEST.Financial.ClaimStatusClaimLink",
-                "CIMSTEST.Financial.ClaimCostPlus",
-                "CIMSTEST.Customer.ClaimBlackList")
-                .addProcessor("Process", () -> new MergedMessageProcessor(), "Source")
-                .addStateStore(processingStore, "Process")
-                .addStateStore(outputStore, "Process")
-                .addSink("Sink", "sink-topic", "Process");
-
         final KafkaStreams streams = new KafkaStreams(topology, props);
 
         streams.cleanUp();
@@ -73,55 +43,15 @@ public class StreamJoiner {
     }
 
     private Topology buildTopology() {
-        //topic2.print(Printed.toSysOut());
-        //[ClaimStatus: {"CS_ClaimStatusID": 12288}, {"CS_ClaimStatusID": 12288, "CS_Description": "Claim contains invalid drugs                                                                        ", "__deleted": "false"}
-        //ClaimStatusClaimLink: {"CL_ClaimID": 12229719, "CS_ClaimStatusID": 26711}, {"CL_ClaimID": 12229719, "CS_ClaimStatusID": 26711, "__deleted": "false"}
-
         StreamsBuilder builder = new StreamsBuilder();
 
-        //keySetStreams.get(0).print(Printed.toSysOut());
-        //keySetStreams.get(1).print(Printed.toSysOut());
+        KStream<GenericRecord, ClaimStatus> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
+        KTable<Integer, ClaimStatus> moddedTopic1 = topic1.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
 
-        //KStream<GenericRecord, ClaimStatus> topic1 = builder.stream("CIMSTEST.Financial.ClaimStatus");
-        //KTable<Integer, ClaimStatus> moddedTopic1 = topic1.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
+        KStream<GenericRecord, ClaimStatusClaimLink> topic2 = builder.stream("CIMSTEST.Financial.ClaimStatusClaimLink");
+        KTable<Integer, ClaimStatusClaimLink> moddedTopic2 = topic2.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
 
-        //KStream<GenericRecord, ClaimStatusClaimLink> topic2 = builder.stream("CIMSTEST.Financial.ClaimStatusClaimLink");
-        //KTable<Integer, ClaimStatusClaimLink> moddedTopic2 = topic2.map((key, value) -> KeyValue.pair(value.getCSClaimStatusID(), value)).toTable();
-
-        /*KStream<GenericRecord, ClaimCostPlus> topic3 = builder.stream("CIMSTEST.Financial.ClaimCostPlus");
-        KTable<Integer, ClaimCostPlus> moddedtopic3 = topic3.map((key, value) -> KeyValue.pair(value.getCLClaimID(), value)).toTable();*/
-
-
-
-        //streamJoiner(moddedTopic1, moddedTopic2).toStream().to(Arguments.outputTopic);
 
         return builder.build();
-    }
-
-    private KTable streamJoiner (KTable leftTopic, KTable rightTopic) {
-
-        KTable<Integer, Claim> joined = leftTopic.join(rightTopic,
-                (left,right) -> {
-                    JSONObject leftJSON = new JSONObject(left.toString());
-                    JSONObject rightJSON = new JSONObject(right.toString());
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    Claim claim = new Claim();
-
-                    leftJSON.keys().forEachRemaining(k -> {
-                        if (!rightJSON.has(k)) {
-                            rightJSON.put(k, leftJSON.get(k));
-                        }
-                    });
-
-                    try {
-                        claim = objectMapper.readValue(rightJSON.toString(), Claim.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    return claim;
-                }
-        );
-        return joined;
     }
 }

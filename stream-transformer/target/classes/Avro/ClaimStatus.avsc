@@ -1,0 +1,19 @@
+{
+    "type": "record",
+    "name": "ClaimStatus",
+    "fields": [
+        {
+            "name": "CS_ClaimStatusID",
+            "type": "int"
+        },
+        {
+            "name": "CS_Description",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        }
+    ],
+    "connect.name": "CIMSTEST.Financial.ClaimStatus.Value"
+}
