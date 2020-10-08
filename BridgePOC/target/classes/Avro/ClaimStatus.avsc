@@ -1,0 +1,20 @@
+{
+    "type": "record",
+    "name": "ClaimStatus",
+    "namespace": "gms.cims.bridge",
+    "fields": [
+        {
+            "name": "CS_ClaimStatusID",
+            "type": "int"
+        },
+        {
+            "name": "CS_Description",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        }
+    ],
+    "connect.name": "CIMSTEST.Financial.ClaimStatus.Value"
+}

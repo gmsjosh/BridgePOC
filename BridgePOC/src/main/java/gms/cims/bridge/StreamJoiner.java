@@ -37,6 +37,12 @@ public class StreamJoiner {
                 Serdes.String()
         );
 
+        StoreBuilder test = Stores.keyValueStoreBuilder(
+                Stores.inMemoryKeyValueStore("outputStore"),
+                Serdes.String(),
+                Serdes.String()
+        );
+
         topology.addSource(
                 "Source",
                 "CIMSTEST.Financial.ClaimStatus",

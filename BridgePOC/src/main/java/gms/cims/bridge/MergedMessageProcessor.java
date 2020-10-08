@@ -1,5 +1,6 @@
 package gms.cims.bridge;
 
+import com.google.gson.JsonObject;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.processor.Processor;
@@ -7,37 +8,24 @@ import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.PunctuationType;
 import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MergedMessageProcessor implements Processor<GenericRecord, GenericRecord> {
 
     private ProcessorContext context;
-    private KeyValueStore<String, String> outputStore;
-    private KeyValueStore<String, String> processingStore;
+    private KeyValueStore processingStore;
 
     @Override
     public void init(ProcessorContext processorContext) {
         // keep the processor context locally because we need it in punctuate() and commit()
         this.context = processorContext;
-        // retrieve the key-value store named "inmemory-store"
+        // retrieve the key-value store named "processingStore"
         this.processingStore = (KeyValueStore) this.context.getStateStore("processingStore");
-        this.outputStore = (KeyValueStore) this.context.getStateStore("outputStore");
-
-        // schedule a punctuate() method every second based on event-time
-        /*this.context.schedule(Duration.ofSeconds(1), PunctuationType.WALL_CLOCK_TIME, (timestamp) -> {
-            KeyValueIterator<String, String> iter = this.outputStore.all();
-            while (iter.hasNext()) {
-                KeyValue<String, String> entry = iter.next();
-                context.forward(entry.key, entry.value.toString());
-            }
-            iter.close();
-
-            // commit the current processing progress
-            context.commit();
-        });*/
     }
 
     @Override
@@ -49,44 +37,26 @@ public class MergedMessageProcessor implements Processor<GenericRecord, GenericR
         }
         //If kvStore has items, check to see if the input value has a matching value in the kvStore
         else {
-            boolean broken = false;
             //Set the input value to JSONObject for easy looping
-            JSONObject inputValue = new JSONObject(gv.toString());
-            //Loop through each kvp in the kvStore
-            KeyValueIterator<String, String> kvStoreIterator = this.processingStore.all();
-            while (kvStoreIterator.hasNext()) {
-                //Grab the kvStore Value and convert to JSONObject
-                KeyValue<String, String> storeKVP = kvStoreIterator.next();
-                JSONObject storeValue = new JSONObject(storeKVP.value);
-                // Check if the values are the same
-                if (AreTheSame(inputValue, storeValue)) {
-                    broken = true;
-                    break;
-                }
-                //loop though each kvp in the input value
-                Iterator<String> inputValueIterator = inputValue.keys();
-                while (inputValueIterator.hasNext()) {
-                    //Set the key variable
-                    String inputValueKey = inputValueIterator.next();
-                    //When a value from the storeValue matches with the value of the input based on the same key, go ahead and combine them
-                    if (HasSameValue(inputValue, storeValue, inputValueKey)){
-                        //get the combined json
-                        inputValue = CombineJSONObjects(inputValue, storeValue);
-                        //delete the old record
-                        this.processingStore.delete(storeKVP.key);
-                        //add new record
-                        this.processingStore.put(gk.toString(), inputValue.toString());
-                        //Output to Sink Topic
-                        context.forward(gk.toString(), inputValue.toString());
-                        //set matched to true and break out of loops.
-                        broken = true;
-                        break;
-                    }
-                }
-                if (broken) {break;}
+            String inputKey = gk.toString();
+            String inputValue = gv.toString();
+            //Get the value from the kvStore
+            KeyValue<String, String> storeKVP = FindInKvStore(this.processingStore, inputKey);
+            if (storeKVP!=null) {
+                // combine the input and store keys and values.
+                String combinedKey = CombineJSONStrings(inputKey, storeKVP.key);
+                String combinedValue = CombineJSONStrings(inputValue, storeKVP.value);
+                //delete the old record
+                this.processingStore.delete(storeKVP.key);
+                //add new record
+                this.processingStore.put(combinedKey, combinedValue);
+                //Output to Sink Topic
+                context.forward(combinedKey, combinedValue);
             }
-            if (!broken) {
+            else {
                 this.processingStore.put(gk.toString(), gv.toString());
+                String temp = this.processingStore.all().toString();
+                System.out.println();
             }
         }
 
@@ -97,33 +67,43 @@ public class MergedMessageProcessor implements Processor<GenericRecord, GenericR
 
     }
 
-    private boolean HasSameValue(JSONObject left, JSONObject right, String key) {
-        //If both the left and right have the same key
-        if (left.has(key) && right.has(key)) {
-            //Check if the values for the key are the same
-            boolean firstCondition = (left.get(key).toString().equals(right.get(key).toString()));
-            return firstCondition;
+    private KeyValue<String, String> FindInKvStore(KeyValueStore<String, String> kvStore, String inputKey) {
+        // create an iterator of all the values from the kvStore
+        KeyValueIterator<String, String> kvStoreIterator = kvStore.all();
+        while (kvStoreIterator.hasNext()) {
+            // set variables
+            KeyValue<String, String> storeKVP = kvStoreIterator.next();
+            String storeKey = storeKVP.key;
+            // Check that the keys are not the same and that the keys share some of the same values
+            if (AreNotTheSameAndShareValues(storeKey, inputKey)) return storeKVP;
         }
-        else return false;
+        return null;
     }
 
-    private boolean AreTheSame(JSONObject left, JSONObject right) {
-        return (left.toString().equals(right.toString()));
+    private boolean AreNotTheSameAndShareValues(String left, String right) {
+        // if the strings are equal return false
+        if (left.equals(right)) return false;
+        right = right.replace(" ", "");
+        // split the strings by commas, and remove the braces
+        String[] kvps = left.replaceAll("[{}]", "").split(",");
+        // loop through each kvp and if the right string matches one of the kvps return true
+        for (String kvp : kvps) {
+            if (right.contains(kvp)) return true;
+        }
+        return false;
     }
 
-    private JSONObject CombineJSONObjects(JSONObject left, JSONObject right) {
-        left.keys().forEachRemaining(k -> {
-            //Add missing values
-            if (!right.has(k)) {
-                right.put(k, left.get(k));
+    private String CombineJSONStrings(String left, String right) {
+        JSONObject leftJSON = new JSONObject(left);
+        JSONObject rightJSON = new JSONObject(right);
+        leftJSON.keys().forEachRemaining(k -> {
+            // remove old values
+            if (rightJSON.has(k)) {
+                rightJSON.remove(k);
             }
-            //Update old values
-            else {
-                right.remove(k);
-                right.put(k, left.get(k));
-            }
+            // add new values
+            rightJSON.put(k, leftJSON.get(k));
         });
-        return right;
+        return rightJSON.toString();
     }
-
 }
