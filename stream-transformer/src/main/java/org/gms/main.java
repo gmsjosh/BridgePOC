@@ -24,9 +24,8 @@ public class main {
         Arguments.CommonKey = args[3];
         Arguments.Broker = args[4];
         Arguments.SchemaRegistry = args[5];
-        Arguments.GroupId = args[6];
-        Arguments.ApplicationID = args[7];
-        Arguments.AutoOffsetResetConfig = args[8];
+        Arguments.ApplicationID = args[6];
+        Arguments.AutoOffsetResetConfig = args[7];
 
         Topology topology = buildTopology();
         Properties props = buildProperties();
@@ -51,27 +50,27 @@ public class main {
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<GenericRecord, GenericRecord> topic1 = builder.stream(Arguments.LeftTopicName);
-        KTable<Integer, GenericRecord> keySetTopic1 = topic1.map((key, value) -> KeyValue.pair(((Integer) value.get(Arguments.CommonKey)), value)).toTable();
+        KTable<GenericRecord, GenericRecord> keySetTopic1 = topic1.map((key, value) -> KeyValue.pair(SetKeyRecord(value, Arguments.CommonKey), value)).toTable();
 
         KStream<GenericRecord, GenericRecord> topic2 = builder.stream(Arguments.RightTopicName);
-        KTable<Integer, GenericRecord> keySetTopic2 = topic2.map((key, value) -> KeyValue.pair(((Integer) value.get(Arguments.CommonKey)), value)).toTable();
+        KTable<GenericRecord, GenericRecord> keySetTopic2 = topic2.map((key, value) -> KeyValue.pair(SetKeyRecord(SetKeyRecord(value, Arguments.CommonKey), Arguments.CommonKey), value)).toTable();
 
-        KTable<Integer, GenericRecord> joined = InnerJoinKTables(keySetTopic1, keySetTopic2);
+        KTable<GenericRecord, GenericRecord> joined = InnerJoinKTables(keySetTopic1, keySetTopic2);
 
         joined.toStream().to(Arguments.OutputTopicName);
 
         return builder.build();
     }
 
-    private static KTable<Integer, GenericRecord> InnerJoinKTables(KTable<Integer, GenericRecord> leftTopic, KTable<Integer, GenericRecord> rightTopic) {
-        KTable<Integer, GenericRecord> joined = leftTopic.join(rightTopic, (left,right) -> MergeMessages(left, right) );
+    private static KTable<GenericRecord, GenericRecord> InnerJoinKTables(KTable<GenericRecord, GenericRecord> leftTopic, KTable<GenericRecord, GenericRecord> rightTopic) {
+        KTable<GenericRecord, GenericRecord> joined = leftTopic.join(rightTopic, (left,right) -> MergeMessages(left, right) );
         return joined;
     }
     private static GenericRecord MergeMessages(GenericRecord left, GenericRecord right) {
         JSONObject mergedValues = MergeValues(left, right);
         Schema mergedSchema;
-        if (Arguments.Schema==null) mergedSchema = MergeSchema(left, right);
-        else mergedSchema = Arguments.Schema;
+        if (Arguments.ValueSchema==null) mergedSchema = MergeSchema(left, right);
+        else mergedSchema = Arguments.ValueSchema;
         GenericRecord mergedGenericRecord = CreateGenericRecord(mergedValues, mergedSchema);
         return mergedGenericRecord;
     }
@@ -110,5 +109,18 @@ public class main {
             record.put(k, values.get(k));
         });
         return record;
+    }
+
+    private static GenericRecord SetKeyRecord(GenericRecord value, String key) {
+        Integer keyValue = ((Integer) value.get(key));
+        JSONObject json = new JSONObject().put(key, keyValue);
+        if (Arguments.KeySchema!=null) return CreateGenericRecord(json, Arguments.KeySchema);
+
+        Field inputField = value.getSchema().getField(key);
+        Field outputField = new Field(inputField.name(), inputField.schema(), inputField.doc(), inputField.defaultVal());
+        ArrayList<Field> outputFields = new ArrayList();
+        outputFields.add(outputField);
+        Arguments.KeySchema = Schema.createRecord("Key", "info", "org.gms", false, outputFields);
+        return CreateGenericRecord(json, Arguments.KeySchema);
     }
 }
