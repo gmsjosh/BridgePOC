@@ -1,6 +1,7 @@
 {
   "type": "record",
   "name": "Output",
+  "namespace": "org.gms",
   "fields": [
     {"name":"CL_ClaimID", "type":"int"},
     {"name":"CS_ClaimStatusID", "type":"int"},

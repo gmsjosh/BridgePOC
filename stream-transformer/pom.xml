@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>org.gms</groupId>
     <artifactId>stream-transformer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -49,7 +49,6 @@
             <scope>runtime</scope>
             <version>2.13.3</version>
         </dependency>
-
     </dependencies>
 
     <properties>
@@ -68,6 +67,7 @@
         <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
+                <!-- Create classes from avro -->
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
                 <version>1.8.2</version>
@@ -84,37 +84,42 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Use lambda 8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
+            <!-- Create Fat Jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
                 <configuration>
-                    <encoding>UTF-8</encoding>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>org.gms.main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
-            <!-- Allows the example to be run via 'mvn camel:run' -->
-            <plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-maven-plugin</artifactId>
-                <version>3.4.3</version>
-                <configuration>
-                    <logClasspath>true</logClasspath>
-                    <mainClass>main</mainClass>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
-
-
 </project>
