@@ -8,7 +8,7 @@
         "database.password": "Debetest01",
         "database.dbname": "CIMS",
         "database.server.name": "CIMSTEST",
-        "table.whitelist": "Customer.ClaimBlacklist, Financial.ClaimCostPlus, Financial.ClaimStatus, Financial.ClaimStatusClaimLink",
+        "table.whitelist": "Customer.ClaimBlacklist, Financial.ClaimCostPlus, Financial.ClaimStatus, Financial.ClaimStatusClaimLink, Financial.ClaimVoucherNoteClaimLink, Financial.ClaimNoteLink",
         "column.blacklist": ".*RowVersion, .*LastUpdate, .*UserID",
         "database.history.kafka.bootstrap.servers": "broker:9092",
         "database.history.kafka.topic": "dbhistory.CIMS",

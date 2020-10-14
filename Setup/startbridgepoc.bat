@@ -24,3 +24,4 @@ echo WAITING 30 SECONDS
 timeout /t 30
 echo Setting up Connectors
 curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @connector-setup.json
+curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"compatibility": "NONE"}' http://localhost:8081/config/
