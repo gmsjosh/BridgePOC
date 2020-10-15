@@ -13,6 +13,7 @@ Rem BridgePOC is running MainApp in Intellij
 
 pushd %~dp0
 echo Moving Debezium files to D:\debezium-connector-sqlserver
+RMDIR /Q/S D:\debezium-connector-sqlserver
 echo D|xcopy /E ..\debezium-connector-sqlserver D:\debezium-connector-sqlserver
 echo Starting SQL Server Agent:
 net start "SQL Server Agent (MSSQLSERVER)"
@@ -20,8 +21,7 @@ echo Running SQL Setup
 sqlcmd -S %COMPUTERNAME% -i .\setup.sql
 echo Starting Docker Containers
 docker-compose up -d
-echo WAITING 30 SECONDS
-timeout /t 30
+echo WAITING 45 SECONDS
+timeout /t 45
 echo Setting up Connectors
-curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @connector-setup.json
-curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"compatibility": "NONE"}' http://localhost:8081/config/
+curl -s -X POST -H "Content-Type: application/json" --data @connector-setup.json http://localhost:8083/connectors

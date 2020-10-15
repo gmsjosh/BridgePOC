@@ -1,38 +1,51 @@
 package org.gms;
 
+import io.confluent.kafka.streams.serdes.avro.GenericAvroSerde;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         Arguments.LeftTopicName = args[0];
         Arguments.RightTopicName = args[1];
         Arguments.OutputTopicName = args[2];
         Arguments.CommonKey = args[3];
         Arguments.Broker = args[4];
-        Arguments.SchemaRegistry = args[5];
+        Arguments.SchemaRegistryURL = args[5];
         Arguments.ApplicationID = args[6];
         Arguments.AutoOffsetResetConfig = args[7];
 
+        /*Arguments.LeftTopicName = "CIMSTEST.Financial.ClaimStatusClaimLink";
+        Arguments.RightTopicName = "CIMSTEST.Financial.ClaimStatus";
+        Arguments.OutputTopicName = "ClaimStatusClaimLink_ClaimStatus";
+        Arguments.CommonKey = "CS_ClaimStatusID";
+        Arguments.Broker = "localhost:9092";
+        Arguments.SchemaRegistryURL = "http://localhost:8081";
+        Arguments.ApplicationID = "first-join";
+        Arguments.AutoOffsetResetConfig = "earliest";*/
+
         Topology topology = buildTopology();
         Properties props = buildProperties();
+        WaitForInputTopics(props);
+
         final KafkaStreams streams = new KafkaStreams(topology, props);
         streams.cleanUp();
         streams.start();
-        System.out.println(streams.toString());
+        //System.out.println(streams.toString());
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 
@@ -41,31 +54,32 @@ public class main {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, Arguments.ApplicationID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Arguments.Broker);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, Arguments.AutoOffsetResetConfig);
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, KafkaAvroSerde.class);
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaAvroSerde.class);
+        props.put(Arguments.SCHEMA_REGISTRY, Arguments.SchemaRegistryURL);
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, GenericAvroSerde.class);
         return props;
     }
 
     private static Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<GenericRecord, GenericRecord> topic1 = builder.stream(Arguments.LeftTopicName);
-        KTable<GenericRecord, GenericRecord> keySetTopic1 = topic1.map((key, value) -> KeyValue.pair(SetKeyRecord(value, Arguments.CommonKey), value)).toTable();
+        KStream<String, GenericRecord> topic1 = builder.stream(Arguments.LeftTopicName);
+        KTable<String, GenericRecord> keySetTopic1 = topic1.map((key, value) -> KeyValue.pair(SetKey(value, Arguments.CommonKey), value)).toTable();
 
-        KStream<GenericRecord, GenericRecord> topic2 = builder.stream(Arguments.RightTopicName);
-        KTable<GenericRecord, GenericRecord> keySetTopic2 = topic2.map((key, value) -> KeyValue.pair(SetKeyRecord(SetKeyRecord(value, Arguments.CommonKey), Arguments.CommonKey), value)).toTable();
+        KStream<String, GenericRecord> topic2 = builder.stream(Arguments.RightTopicName);
+        KTable<String, GenericRecord> keySetTopic2 = topic2.map((key, value) -> KeyValue.pair(SetKey(value, Arguments.CommonKey), value)).toTable();
 
-        KTable<GenericRecord, GenericRecord> joined = InnerJoinKTables(keySetTopic1, keySetTopic2);
+        KTable<String, GenericRecord> joined = InnerJoinKTables(keySetTopic1, keySetTopic2);
 
         joined.toStream().to(Arguments.OutputTopicName);
 
         return builder.build();
     }
 
-    private static KTable<GenericRecord, GenericRecord> InnerJoinKTables(KTable<GenericRecord, GenericRecord> leftTopic, KTable<GenericRecord, GenericRecord> rightTopic) {
-        KTable<GenericRecord, GenericRecord> joined = leftTopic.join(rightTopic, (left,right) -> MergeMessages(left, right) );
-        return joined;
+    private static KTable<String, GenericRecord> InnerJoinKTables(KTable<String, GenericRecord> leftTopic, KTable<String, GenericRecord> rightTopic) {
+        return leftTopic.join(rightTopic, (left,right) -> MergeMessages(left, right) );
     }
+
     private static GenericRecord MergeMessages(GenericRecord left, GenericRecord right) {
         JSONObject mergedValues = MergeValues(left, right);
         Schema mergedSchema;
@@ -111,16 +125,14 @@ public class main {
         return record;
     }
 
-    private static GenericRecord SetKeyRecord(GenericRecord value, String key) {
-        Integer keyValue = ((Integer) value.get(key));
-        JSONObject json = new JSONObject().put(key, keyValue);
-        if (Arguments.KeySchema!=null) return CreateGenericRecord(json, Arguments.KeySchema);
+    private static String SetKey(GenericRecord value, String commonKey) {
+        return value.get(commonKey).toString();
+    }
 
-        Field inputField = value.getSchema().getField(key);
-        Field outputField = new Field(inputField.name(), inputField.schema(), inputField.doc(), inputField.defaultVal());
-        ArrayList<Field> outputFields = new ArrayList();
-        outputFields.add(outputField);
-        Arguments.KeySchema = Schema.createRecord("Key", "info", "org.gms", false, outputFields);
-        return CreateGenericRecord(json, Arguments.KeySchema);
+    private static void WaitForInputTopics(Properties props) throws ExecutionException, InterruptedException {
+        AdminClient admin = AdminClient.create(props);
+        Integer sleepTime = 10000;
+        while (!admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(Arguments.LeftTopicName))) {System.out.println("WAITING FOR INPUT TOPIC: " + Arguments.LeftTopicName); Thread.sleep(sleepTime);}
+        while (!admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(Arguments.RightTopicName))) {System.out.println("WAITING FOR INPUT TOPIC: " + Arguments.RightTopicName); Thread.sleep(sleepTime);}
     }
 }

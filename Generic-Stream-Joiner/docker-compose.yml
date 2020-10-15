@@ -12,7 +12,7 @@ services:
             RIGHT_TOPIC: CIMSTEST.Financial.ClaimStatus
             OUTPUT_TOPIC: ClaimStatusClaimLink_ClaimStatus
             COMMON_KEY: CS_ClaimStatusID
-            BROKER: broker:9092
+            BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: first-join
             AUTO_OFFSET_RESET_CONFIG: earliest
@@ -23,7 +23,7 @@ services:
             RIGHT_TOPIC: CIMSTEST.Financial.ClaimVoucherNoteClaimLink
             OUTPUT_TOPIC: ClaimNoteLink_ClaimVoucherNoteClaimLink
             COMMON_KEY: CL_ClaimID
-            BROKER: broker:9092
+            BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: second-join
             AUTO_OFFSET_RESET_CONFIG: earliest
@@ -34,7 +34,7 @@ services:
             RIGHT_TOPIC: ClaimNoteLink_ClaimVoucherNoteClaimLink
             OUTPUT_TOPIC: ClaimStatusClaimLink_ClaimStatus_ClaimNoteLink_ClaimVoucherNoteClaimLink
             COMMON_KEY: CL_ClaimID
-            BROKER: broker:9092
+            BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: third-join
             AUTO_OFFSET_RESET_CONFIG: earliest
@@ -45,7 +45,7 @@ services:
             RIGHT_TOPIC: CIMSTEST.Financial.ClaimVoucherNoteClaimLink
             OUTPUT_TOPIC: ClaimStatusClaimLink_ClaimStatus_ClaimVoucherNoteClaimLink
             COMMON_KEY: CL_ClaimID
-            BROKER: broker:9092
+            BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: fourth-join
             AUTO_OFFSET_RESET_CONFIG: earliest
