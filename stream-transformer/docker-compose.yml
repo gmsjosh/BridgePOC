@@ -4,6 +4,7 @@ networks:
       external:
         name: setup_default
 
+#CLAIM STATUS TABLES
 services:
     first-join:
         image: stream-transformer
@@ -16,6 +17,8 @@ services:
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: first-join
             AUTO_OFFSET_RESET_CONFIG: earliest
+    
+    #CLAIM NOTE TABLES
     second-join:
         image: stream-transformer
         environment: 
@@ -27,13 +30,15 @@ services:
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: second-join
             AUTO_OFFSET_RESET_CONFIG: earliest
-    thrid-join:
+
+    #ESI TABLES
+    third-join:
         image: stream-transformer
         environment: 
-            LEFT_TOPIC: ClaimStatusClaimLink_ClaimStatus
-            RIGHT_TOPIC: ClaimNoteLink_ClaimVoucherNoteClaimLink
-            OUTPUT_TOPIC: ClaimStatusClaimLink_ClaimStatus_ClaimNoteLink_ClaimVoucherNoteClaimLink
-            COMMON_KEY: CL_ClaimID
+            LEFT_TOPIC: CIMSTEST.Financial.ESIClaimImportDetail
+            RIGHT_TOPIC: CIMSTEST.Financial.ESIClaimImportDetailType
+            OUTPUT_TOPIC: ESIClaimImportDetail_ESIClaimImportDetailType
+            COMMON_KEY: ESICI_ESIClaimImportDetailTypeID
             BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: third-join
@@ -41,11 +46,37 @@ services:
     fourth-join:
         image: stream-transformer
         environment: 
-            LEFT_TOPIC: ClaimStatusClaimLink_ClaimStatus
-            RIGHT_TOPIC: CIMSTEST.Financial.ClaimVoucherNoteClaimLink
-            OUTPUT_TOPIC: ClaimStatusClaimLink_ClaimStatus_ClaimVoucherNoteClaimLink
-            COMMON_KEY: CL_ClaimID
+            LEFT_TOPIC: ESIClaimImportDetail_ESIClaimImportDetailType
+            RIGHT_TOPIC: CIMSTEST.Reference.ESIClaimFileRecord
+            OUTPUT_TOPIC: ESIClaimImportDetail_ESIClaimImportDetailType_ESIClaimFileRecord
+            COMMON_KEY: ESICF_ESIClaimFileRecordID
             BROKER: http://broker:29092
             SCHEMA_REGISTRY: http://schema-registry:8081
             APPLICATION_ID: fourth-join
             AUTO_OFFSET_RESET_CONFIG: earliest
+
+    #CLAIM REFUND TABLES
+    fifth-join:
+        image: stream-transformer
+        environment: 
+            LEFT_TOPIC: CIMSTEST.Financial.ClaimRefund
+            RIGHT_TOPIC: CIMSTEST.Reference.ClaimRefundReason
+            OUTPUT_TOPIC: ClaimRefund_ClaimRefundReason
+            COMMON_KEY: RE_ReasonID
+            BROKER: http://broker:29092
+            SCHEMA_REGISTRY: http://schema-registry:8081
+            APPLICATION_ID: fifth-join
+            AUTO_OFFSET_RESET_CONFIG: earliest
+    sixth-join:
+        image: stream-transformer
+        environment: 
+            LEFT_TOPIC: ESIClaimImportDetail_ESIClaimImportDetailType
+            RIGHT_TOPIC: CIMSTEST.Reference.ClaimRefundReason
+            OUTPUT_TOPIC: ESIClaimImportDetail_ESIClaimImportDetailType_ESIClaimFileRecord
+            COMMON_KEY: ESICF_ESIClaimFileRecordID
+            BROKER: http://broker:29092
+            SCHEMA_REGISTRY: http://schema-registry:8081
+            APPLICATION_ID: sixth-join
+            AUTO_OFFSET_RESET_CONFIG: earliest
+    
+    

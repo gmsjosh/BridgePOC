@@ -20,23 +20,23 @@ public class main {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        Arguments.LeftTopicName = args[0];
+        /*Arguments.LeftTopicName = args[0];
         Arguments.RightTopicName = args[1];
         Arguments.OutputTopicName = args[2];
         Arguments.CommonKey = args[3];
         Arguments.Broker = args[4];
         Arguments.SchemaRegistryURL = args[5];
         Arguments.ApplicationID = args[6];
-        Arguments.AutoOffsetResetConfig = args[7];
+        Arguments.AutoOffsetResetConfig = args[7];*/
 
-        /*Arguments.LeftTopicName = "CIMSTEST.Financial.ClaimStatusClaimLink";
+        Arguments.LeftTopicName = "CIMSTEST.Financial.ClaimStatusClaimLink";
         Arguments.RightTopicName = "CIMSTEST.Financial.ClaimStatus";
         Arguments.OutputTopicName = "ClaimStatusClaimLink_ClaimStatus";
         Arguments.CommonKey = "CS_ClaimStatusID";
         Arguments.Broker = "localhost:9092";
         Arguments.SchemaRegistryURL = "http://localhost:8081";
         Arguments.ApplicationID = "first-join";
-        Arguments.AutoOffsetResetConfig = "earliest";*/
+        Arguments.AutoOffsetResetConfig = "earliest";
 
         Topology topology = buildTopology();
         Properties props = buildProperties();
