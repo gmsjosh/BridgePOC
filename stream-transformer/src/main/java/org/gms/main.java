@@ -126,7 +126,8 @@ public class main {
     }
 
     private static String SetKey(GenericRecord value, String commonKey) {
-        return value.get(commonKey).toString();
+        if (value==null) return null;
+        else return value.get(commonKey).toString();
     }
 
     private static void WaitForInputTopics(Properties props) throws ExecutionException, InterruptedException {

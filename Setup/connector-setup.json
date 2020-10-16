@@ -8,7 +8,7 @@
         "database.password": "Debetest01",
         "database.dbname": "CIMS",
         "database.server.name": "CIMSTEST",
-        "table.include.list": "Customer.ClaimBlacklist, Financial.ClaimCostPlus, Financial.ClaimStatus, Financial.ClaimStatusClaimLink, Financial.ClaimVoucherNoteClaimLink, Financial.ClaimNoteLink",
+        "table.include.list": ".*Claim.*",
         "column.exclude.list": ".*RowVersion, .*LastUpdate, .*UserID",
         "database.history.kafka.bootstrap.servers": "broker:29092",
         "value.converter": "io.confluent.connect.avro.AvroConverter",
