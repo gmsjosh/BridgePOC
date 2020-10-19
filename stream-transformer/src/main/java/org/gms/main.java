@@ -19,25 +19,7 @@ import java.util.concurrent.ExecutionException;
 public class main {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-
-        /*Arguments.LeftTopicName = args[0];
-        Arguments.RightTopicName = args[1];
-        Arguments.OutputTopicName = args[2];
-        Arguments.CommonKey = args[3];
-        Arguments.Broker = args[4];
-        Arguments.SchemaRegistryURL = args[5];
-        Arguments.ApplicationID = args[6];
-        Arguments.AutoOffsetResetConfig = args[7];*/
-
-        Arguments.LeftTopicName = "CIMSTEST.Financial.ClaimStatusClaimLink";
-        Arguments.RightTopicName = "CIMSTEST.Financial.ClaimStatus";
-        Arguments.OutputTopicName = "ClaimStatusClaimLink_ClaimStatus";
-        Arguments.CommonKey = "CS_ClaimStatusID";
-        Arguments.Broker = "localhost:9092";
-        Arguments.SchemaRegistryURL = "http://localhost:8081";
-        Arguments.ApplicationID = "first-join";
-        Arguments.AutoOffsetResetConfig = "earliest";
-
+        SetupArguments(args);
         Topology topology = buildTopology();
         Properties props = buildProperties();
         WaitForInputTopics(props);
@@ -45,7 +27,6 @@ public class main {
         final KafkaStreams streams = new KafkaStreams(topology, props);
         streams.cleanUp();
         streams.start();
-        //System.out.println(streams.toString());
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 
@@ -62,47 +43,43 @@ public class main {
 
     private static Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
-
-        KStream<String, GenericRecord> topic1 = builder.stream(Arguments.LeftTopicName);
-        KTable<String, GenericRecord> keySetTopic1 = topic1.map((key, value) -> KeyValue.pair(SetKey(value, Arguments.CommonKey), value)).toTable();
-
-        KStream<String, GenericRecord> topic2 = builder.stream(Arguments.RightTopicName);
-        KTable<String, GenericRecord> keySetTopic2 = topic2.map((key, value) -> KeyValue.pair(SetKey(value, Arguments.CommonKey), value)).toTable();
-
-        KTable<String, GenericRecord> joined = InnerJoinKTables(keySetTopic1, keySetTopic2);
-
+        ArrayList<KTable<String, GenericRecord>> tables = KeySharedTableGenerator(builder);
+        KTable<String, GenericRecord> joined = InnerJoinKTables(tables);
         joined.toStream().to(Arguments.OutputTopicName);
 
         return builder.build();
     }
 
-    private static KTable<String, GenericRecord> InnerJoinKTables(KTable<String, GenericRecord> leftTopic, KTable<String, GenericRecord> rightTopic) {
-        return leftTopic.join(rightTopic, (left,right) -> MergeMessages(left, right) );
+    private static KTable<String, GenericRecord> InnerJoinKTables(ArrayList<KTable<String, GenericRecord>> tables) {
+        KTable<String, GenericRecord> joined = tables.get(0);
+        for (int i = 1; i < tables.size(); i++) {
+            joined = joined.join(tables.get(i), (left,right) -> MergeMessages(left, right) );
+        }
+        return joined;
     }
 
     private static GenericRecord MergeMessages(GenericRecord left, GenericRecord right) {
         JSONObject mergedValues = MergeValues(left, right);
-        Schema mergedSchema;
-        if (Arguments.ValueSchema==null) mergedSchema = MergeSchema(left, right);
-        else mergedSchema = Arguments.ValueSchema;
-        GenericRecord mergedGenericRecord = CreateGenericRecord(mergedValues, mergedSchema);
+        if (Arguments.OutputRecord==null) Arguments.OutputRecord = GenerateGenericRecord(left, right);
+        GenericRecord mergedGenericRecord = PopulateGenericRecord(mergedValues);
+        mergedGenericRecord.getSchema();
         return mergedGenericRecord;
     }
 
     private static Schema MergeSchema(GenericRecord left, GenericRecord right) {
-        Schema rightSchema = right.getSchema();
+        String rightSchemaString = right.getSchema().toString();
         List<Field> rightFields = right.getSchema().getFields();
         List<Field> leftFields = left.getSchema().getFields();
         ArrayList<Field> mergedFields = new ArrayList();
         rightFields.forEach(field -> mergedFields.add(new Field(field.name(), field.schema(), field.doc(), field.defaultVal())));
 
         for (Field field : leftFields) {
-            if (rightSchema.getField(field.name())==null) {
+            if (!rightSchemaString.contains(field.name())) {
                 Field newField = new Field(field.name(), field.schema(), field.doc(), field.defaultVal());
                 mergedFields.add(newField);
             }
         }
-        Schema mergedSchema = Schema.createRecord("Value", "info", "org.gms", false, mergedFields);
+        Schema mergedSchema = Schema.createRecord("Claim", "Claim Record", "org.gms", false, mergedFields);
         return mergedSchema;
     }
 
@@ -117,8 +94,12 @@ public class main {
         return rightJSON;
     }
 
-    private static GenericRecord CreateGenericRecord(JSONObject values, Schema schema) {
-        final GenericData.Record record = new GenericData.Record(schema);
+    private static GenericRecord GenerateGenericRecord(GenericRecord left, GenericRecord right) {
+        return new GenericData.Record(MergeSchema(left, right));
+    }
+
+    private static GenericRecord PopulateGenericRecord(JSONObject values) {
+        GenericRecord record = Arguments.OutputRecord;
         values.keys().forEachRemaining(k -> {
             record.put(k, values.get(k));
         });
@@ -132,8 +113,33 @@ public class main {
 
     private static void WaitForInputTopics(Properties props) throws ExecutionException, InterruptedException {
         AdminClient admin = AdminClient.create(props);
-        Integer sleepTime = 10000;
-        while (!admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(Arguments.LeftTopicName))) {System.out.println("WAITING FOR INPUT TOPIC: " + Arguments.LeftTopicName); Thread.sleep(sleepTime);}
-        while (!admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(Arguments.RightTopicName))) {System.out.println("WAITING FOR INPUT TOPIC: " + Arguments.RightTopicName); Thread.sleep(sleepTime);}
+        Integer sleepTime = 5000;
+        for (String topic : Arguments.InputTopicNames) {
+            boolean topicExists = admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(topic));
+            while (!topicExists) {
+                System.out.println("Waiting for: " + topic);
+                Thread.sleep(sleepTime);
+                topicExists = admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(topic));
+            }
+        }
+    }
+
+    private static ArrayList<KTable<String, GenericRecord>> KeySharedTableGenerator(StreamsBuilder builder) {
+        ArrayList<KTable<String, GenericRecord>> tables = new ArrayList<>();
+        for (String topicName : Arguments.InputTopicNames) {
+            KStream<String, GenericRecord> topic = builder.stream(topicName);
+            KTable<String, GenericRecord> keySetTopic = topic.map((key, value) -> KeyValue.pair(SetKey(value, Arguments.CommonKey), value)).toTable();
+            tables.add(keySetTopic);
+        }
+        return tables;
+    }
+    private static void SetupArguments(String[] args) {
+        for (int i = 0; i < (args.length-Arguments.NonInputTopicArgs); i++) Arguments.InputTopicNames.add(args[i]);
+        Arguments.OutputTopicName = args[args.length-Arguments.NonInputTopicArgs];
+        Arguments.CommonKey = args[args.length-Arguments.NonInputTopicArgs+1];
+        Arguments.Broker = args[args.length-Arguments.NonInputTopicArgs+2];
+        Arguments.SchemaRegistryURL = args[args.length-Arguments.NonInputTopicArgs+3];
+        Arguments.ApplicationID = args[args.length-Arguments.NonInputTopicArgs+4];
+        Arguments.AutoOffsetResetConfig = args[args.length-Arguments.NonInputTopicArgs+5];
     }
 }
