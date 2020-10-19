@@ -60,9 +60,8 @@ public class main {
 
     private static GenericRecord MergeMessages(GenericRecord left, GenericRecord right) {
         JSONObject mergedValues = MergeValues(left, right);
-        if (Arguments.OutputRecord==null) Arguments.OutputRecord = GenerateGenericRecord(left, right);
-        GenericRecord mergedGenericRecord = PopulateGenericRecord(mergedValues);
-        mergedGenericRecord.getSchema();
+        Schema mergedSchema = MergeSchema(left, right);
+        GenericRecord mergedGenericRecord = CreateGenericRecord(mergedValues, mergedSchema);
         return mergedGenericRecord;
     }
 
@@ -94,12 +93,8 @@ public class main {
         return rightJSON;
     }
 
-    private static GenericRecord GenerateGenericRecord(GenericRecord left, GenericRecord right) {
-        return new GenericData.Record(MergeSchema(left, right));
-    }
-
-    private static GenericRecord PopulateGenericRecord(JSONObject values) {
-        GenericRecord record = Arguments.OutputRecord;
+    private static GenericRecord CreateGenericRecord(JSONObject values, Schema schema) {
+        final GenericData.Record record = new GenericData.Record(schema);
         values.keys().forEachRemaining(k -> {
             record.put(k, values.get(k));
         });
@@ -117,8 +112,8 @@ public class main {
         for (String topic : Arguments.InputTopicNames) {
             boolean topicExists = admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(topic));
             while (!topicExists) {
-                System.out.println("Waiting for: " + topic);
                 Thread.sleep(sleepTime);
+                System.out.println("Waiting for Topic: " + topic);
                 topicExists = admin.listTopics().names().get().stream().anyMatch(topicName -> topicName.equalsIgnoreCase(topic));
             }
         }

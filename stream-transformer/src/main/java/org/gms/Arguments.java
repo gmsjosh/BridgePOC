@@ -1,7 +1,6 @@
 package org.gms;
 
 import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericRecord;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,6 @@ public class Arguments {
     public static String CommonKey;
     public static String ApplicationID;
     public static String AutoOffsetResetConfig;
+    public static Schema ValueSchema;
     public static Integer NonInputTopicArgs = 6;
-    public static GenericRecord OutputRecord;
-
 }
