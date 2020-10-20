@@ -10,13 +10,15 @@
         "database.server.name": "CIMSTEST",
         "table.include.list": "Financial.TravelAssistCaseLink, Financial.CaseNoteLink, Financial.ClaimCase",
         "column.exclude.list": ".*RowVersion, .*LastUpdate, .*UserID",
-        "database.history.kafka.bootstrap.servers": "broker:29092",
         "value.converter": "io.confluent.connect.avro.AvroConverter",
         "value.converter.schema.registry.url": "http://schema-registry:8081",
-        "database.history.kafka.topic": "dbhistory.CIMS",
+        "value.converter.enhanced.avro.schema.support": "true",
+        "time.precision​.mode": "connect",
         "decimal.handling.mode": "double",
         "transforms": "unwrap",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-        "transforms.unwrap.drop.tombstones": "false"
+        "transforms.unwrap.drop.tombstones": "false",
+        "database.history.kafka.bootstrap.servers": "broker:29092",
+        "database.history.kafka.topic": "dbhistory.CIMS"
     }
 }
