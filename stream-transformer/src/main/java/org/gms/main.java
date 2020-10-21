@@ -81,9 +81,6 @@ public class main {
             if (!rightSchemaString.contains(field.name())) {
                 Field newField = new Field(field.name(), field.schema(), field.doc(), field.defaultVal());
                 mergedFields.add(newField);
-                if (mergedFields.size() > 5) {
-                    System.out.println();
-                }
             }
         }
         Schema mergedSchema = Schema.createRecord("Claim", "Claim Record", "org.gms", false, mergedFields);
