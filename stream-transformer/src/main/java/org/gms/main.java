@@ -31,11 +31,6 @@ public class main {
     }
 
     private static Properties buildProperties() {
-
-        /*final Map<String, String> serdeConfig = Collections.singletonMap(Arguments.SCHEMA_REGISTRY, Arguments.SchemaRegistryURL);
-        final Serde<GenericRecord> valueGenericAvroSerde = new GenericAvroSerde();
-        valueGenericAvroSerde.configure(serdeConfig, false); // `false` for record values*/
-
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, Arguments.ApplicationID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Arguments.Broker);
@@ -51,7 +46,6 @@ public class main {
         ArrayList<KTable<String, GenericRecord>> tables = KeySharedTableGenerator(builder);
         KTable<String, GenericRecord> joined = InnerJoinKTables(tables);
         joined.toStream().to(Arguments.OutputTopicName);
-
         return builder.build();
     }
 

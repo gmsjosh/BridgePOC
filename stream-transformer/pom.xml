@@ -34,6 +34,11 @@
         <!--AVRO-->
         <dependency>
             <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
             <artifactId>kafka-streams-avro-serde</artifactId>
             <version>6.0.0</version>
         </dependency>
